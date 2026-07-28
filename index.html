@@ -2,10 +2,45 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=dashboard.html">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>alnrfLO — Codex du Voyageur</title>
+<meta name="description" content="Tableau de bord de statistiques gaming — League of Legends, Valorant, TFT, Genshin Impact, Honkai: Star Rail, Wuthering Waves.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500;1,600&family=Poppins:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <p>Redirection vers le <a href="dashboard.html">dashboard</a>…</p>
+
+<div class="shell">
+
+  <aside class="app-sidebar" id="sidebar">
+    <div class="brand-block">
+      <div class="brand-title">alnrfLO</div>
+      <div class="brand-sub">#93K · EUW</div>
+    </div>
+    <div class="side-divider"></div>
+    <nav class="app-nav" id="appNav"><!-- injected by app.js --></nav>
+    <div class="app-sidebar-footer">
+      <button class="ctrl-btn" id="themeToggle">🌙 Mode nuit</button>
+      <button class="ctrl-btn" id="exportBtn">⬇ Exporter en image</button>
+    </div>
+  </aside>
+
+  <div class="sidebar-scrim" id="sidebarScrim"></div>
+
+  <main class="app-main">
+    <div class="mobile-topbar">
+      <button class="back-btn" id="sidebarToggle" style="margin:0;">☰ Menu</button>
+    </div>
+    <div class="app-content" id="content"><!-- injected by app.js --></div>
+  </main>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
