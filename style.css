@@ -424,6 +424,7 @@
   }
   .page-hero-art{
     position:absolute; inset:0; background-size:cover; background-position:center;
+    background-color:#241f38;
     opacity:0.55; filter:saturate(1.25); transform: scale(1.05);
   }
   .page-hero-art.art-abstract{

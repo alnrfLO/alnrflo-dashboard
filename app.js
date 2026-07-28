@@ -73,6 +73,39 @@
       return `<div class="matchup-row"><span><img src="${champIcon(m.champion)}" alt=""/>vs ${esc(m.label || m.champion)}</span><span class="${wrClass(wr)}">${m.wins}V ${m.losses}D · ${wr}%</span></div>`;
     }).join('');
   }
+  function echoTable(rows) {
+    return `<div class="champ-table-wrap"><table class="champ-full-table">
+      <tr><th>Écho</th><th>Set</th><th>Stat principale</th><th>Crit Value</th></tr>
+      ${rows.map(e => `<tr><td class="champ-name-cell"><img src="${e.icon}" alt=""/>${esc(e.name)}</td><td>${esc(e.set)}</td><td>${esc(e.mainStat)}</td><td>${e.cv > 0 ? `${fmt1(e.cv)} CV · ${e.rv}% RV` : '—'}</td></tr>`).join('')}
+    </table></div>`;
+  }
+  function genshinCharBlock(c) {
+    const s = c.stats;
+    const statPairs = [['PV', fmtInt(s.hp)], ['ATQ', fmtInt(s.atk)], ['DÉF', fmtInt(s.def)], ['Maîtrise Élém.', s.elementalMastery], ['Taux CRIT', s.critRate + '%'], ['DGT CRIT', s.critDmg + '%'], ['Recharge Énergie', s.energyRecharge + '%']];
+    if (s.bonusDmg) statPairs.push([s.bonusDmg.label, s.bonusDmg.value + '%']);
+    return `<div class="char-block">
+      <div class="char-top"><span class="char-name">${esc(c.name)}</span><span class="char-lv">${esc(c.element)} · Niv. ${esc(c.level)} · ${c.critValue} CV${c.topPercent ? ` · TOP ${c.topPercent}%` : ''}</span></div>
+      <div class="char-block-body">
+        <img alt="${esc(c.name)}" class="char-portrait" src="${c.portrait}"/>
+        <div>
+          ${chipRow([{ text: `${c.weapon.name} ${c.weapon.rarity}★ ${c.weapon.refine} (Niv. ${c.weapon.level})` }, { text: c.set }])}
+          ${fullStats(statPairs)}
+        </div>
+      </div>
+    </div>`;
+  }
+  function wuwaCharBlock(c) {
+    return `<div class="char-block">
+      <div class="char-top"><span class="char-name">${esc(c.name)}</span><span class="char-lv">${esc(c.sequence)} · ${esc(c.board)} · ${c.boardPct}%</span></div>
+      <div class="char-block-body">
+        <img alt="${esc(c.name)}" class="char-portrait" src="${c.portrait}"/>
+        <div>
+          ${chipRow([{ img: c.weapon.icon, text: `${c.weapon.name} (${c.weapon.refine})` }, { text: c.set }])}
+          ${fullStats([['Séquence', c.sequence], ['Rang mondial', `#${fmtInt(c.rank)} / ${fmtInt(c.rankTotal)}`], ['Crit Value', `${c.critValue} CV`], ['Taux CRIT', `${c.critRate}%`], ['DGT CRIT', `${c.critDmg}%`], ['Board', `${esc(c.board)} · ${c.boardPct}%`]])}
+        </div>
+      </div>
+    </div>`;
+  }
   function pageHero({ badge, title, art, accentVars, rankImg, rankLabel, rankSub }) {
     return `<div class="page-hero">
       ${art ? `<div class="page-hero-art" style="background-image:url('${art}')"></div>` : `<div class="page-hero-art art-abstract" style="${accentVars}"></div>`}
@@ -96,6 +129,7 @@
 
   /* ============================================================ HOME */
   function renderHome() {
+    const bestGenshin = D.genshin.characters.reduce((a, c) => (c.critValue > a.critValue ? c : a));
     $content.innerHTML = `
       <div class="divider"><div class="line"></div><span class="mark">✦</span><div class="line"></div></div>
 
@@ -125,13 +159,13 @@
           ['Meilleure unité', `${D.tft.topChampions[3].champion} · #${D.tft.topChampions[3].avgPlacement}`],
           ['Top synergie', D.tft.topTraits[0].trait]
         ])}
-        ${realmSummary('genshin', D.genshin.profileIcon, 'Genshin Impact', 'badge-teal', 'enka.network', [
+        ${realmSummary('genshin', D.genshin.profileIcon, 'Genshin Impact', 'badge-teal', 'akasha.cv', [
           ['Rang Aventure', 'AR ' + D.genshin.adventureRank],
           ['Niveau Monde', 'WL ' + D.genshin.worldLevel],
           ['Abîme Spiralé', D.genshin.spiralAbyss],
-          ['Hauts faits', D.genshin.achievements],
-          ['Vitrine', `${D.genshin.showcase.name} · Niv. ${D.genshin.showcase.level}`],
-          ['Crit / Crit DMG', `${D.genshin.showcase.stats.critRate}% / ${D.genshin.showcase.stats.critDmg}%`]
+          ['Roster build', D.genshin.characters.length + ' personnages'],
+          ['Meilleur CV', `${bestGenshin.name} · ${bestGenshin.critValue}`],
+          ['Hauts faits', D.genshin.achievements]
         ])}
         ${realmSummary('hsr', D.hsr.profileIcon, 'Honkai: Star Rail', 'badge-lav', 'enka.network', [
           ['Niv. Trailblaze', 'TL ' + D.hsr.trailblazeLevel],
@@ -141,10 +175,13 @@
           ['Vitrine', `${D.hsr.showcase.name} · Éidolon ${D.hsr.showcase.eidolon}`],
           ['Crit / Crit DMG', `${D.hsr.showcase.stats.critRate}% / ${D.hsr.showcase.stats.critDmg}%`]
         ])}
-        ${realmSummary('wuwa', null, 'Wuthering Waves', 'badge-cyan', 'wuwa.build', [
-          ['UID', D.wuwa.uid],
-          ['Serveur', D.wuwa.server],
-          ['Statut', 'Import requis']
+        ${realmSummary('wuwa', D.wuwa.characters[1].portrait, 'Wuthering Waves', 'badge-cyan', 'wuwa.build', [
+          ['Résonateurs', D.wuwa.characters.map(c => c.name).join(' · ')],
+          ['Meilleur board', `${D.wuwa.characters[1].name} · ${D.wuwa.characters[1].boardPct}%`],
+          ['2e board', `${D.wuwa.characters[0].name} · ${D.wuwa.characters[0].boardPct}%`],
+          ['Échos', D.wuwa.echoesCount],
+          ['Meilleur écho', `${D.wuwa.echoes[0].name} · ${fmt1(D.wuwa.echoes[0].cv)} CV`],
+          ['Serveur', D.wuwa.server]
         ])}
       </div>
 
@@ -296,8 +333,8 @@
   }
 
   function renderGenshin() {
-    const g = D.genshin, s = g.showcase;
-    const hero = pageHero({ badge: `enka.network · UID ${g.uid}`, title: 'Genshin Impact', art: g.heroArt, rankImg: g.profileIcon, rankLabel: `AR ${g.adventureRank} · WL ${g.worldLevel}`, rankSub: `Abîme Spiralé ${g.spiralAbyss}` });
+    const g = D.genshin;
+    const hero = pageHero({ badge: `enka.network · akasha.cv · UID ${g.uid}`, title: 'Genshin Impact', art: g.heroArt, rankImg: g.profileIcon, rankLabel: `AR ${g.adventureRank} · WL ${g.worldLevel}`, rankSub: `Abîme Spiralé ${g.spiralAbyss}` });
     const side = `
       <div class="side-card">
         <div class="profile-row">
@@ -309,28 +346,19 @@
         <div class="signature">${esc(g.signature)}</div>
       </div>
       <div class="side-card">${sectionLabel('Faits marquants')}${highlightGrid(g.highlights)}</div>
-      <div class="side-card">${sectionLabel('Équipement')}${chipRow([{ img: s.weapon.icon, text: `${s.weapon.name} (Niv. ${s.weapon.level})` }, { text: `Artéfacts : ${s.artifactSet}` }])}</div>
+      <div class="side-card">${sectionLabel('Armes')}${chipRow(g.characters.map(c => ({ text: `${c.weapon.name} (${c.weapon.refine})`, small: c.name })))}</div>
       <div class="side-card"><div class="note">${esc(g.note)}</div></div>
     `;
     const main = `
-      ${sectionLabel('Vitrine — Personnage mis en avant')}
-      <div class="char-block">
-        <div class="char-top"><span class="char-name">${esc(s.name)}</span><span class="char-lv">Niv. ${esc(s.level)} · Talents ${esc(s.talents)}</span></div>
-        <div class="char-block-body">
-          <img alt="${esc(s.name)}" class="char-portrait" src="${s.portrait}"/>
-          <div>
-            <div class="radar-wrap">${radarSvg('genshin')}${radarLegend('genshin', [['ATK', fmtInt(s.stats.atk)], ['Taux CRIT', s.stats.critRate + '%'], ['DGT CRIT', s.stats.critDmg + '%'], ['Recharge Énergie', s.stats.energyRecharge + '%'], ['Maîtrise Élém.', s.stats.elementalMastery], ['DEF', fmtInt(s.stats.def)]])}</div>
-            ${fullStats([['PV', fmtInt(s.stats.hp)], ['ATK', fmtInt(s.stats.atk)], ['DEF', fmtInt(s.stats.def)], ['Maîtrise Élém.', s.stats.elementalMastery], ['Taux CRIT', s.stats.critRate + '%'], ['DGT CRIT', s.stats.critDmg + '%'], ['Recharge Énergie', s.stats.energyRecharge + '%'], [s.stats.bonusDmg.label, s.stats.bonusDmg.value + '%']])}
-          </div>
-        </div>
-      </div>
+      ${sectionLabel(`Roster — ${g.characters.length} personnages (Akasha.cv)`)}
+      ${g.characters.map(genshinCharBlock).join('')}
     `;
     $content.innerHTML = pageShell(hero, side, main);
   }
 
   function renderHsr() {
     const g = D.hsr, s = g.showcase;
-    const hero = pageHero({ badge: `enka.network · UID ${g.uid}`, title: 'Honkai: Star Rail', accentVars: '--art-c1: rgba(108,79,224,0.4); --art-c2: rgba(240,70,108,0.2); --art-c3: rgba(255,255,255,0.25);', rankImg: g.profileIcon, rankLabel: `TL ${g.trailblazeLevel} · EQ ${g.equilibriumLevel}`, rankSub: `Univers Simulé ${g.simulatedUniverse}` });
+    const hero = pageHero({ badge: `enka.network · UID ${g.uid}`, title: 'Honkai: Star Rail', art: g.heroArt, rankImg: g.profileIcon, rankLabel: `TL ${g.trailblazeLevel} · EQ ${g.equilibriumLevel}`, rankSub: `Univers Simulé ${g.simulatedUniverse}` });
     const side = `
       <div class="side-card">
         <div class="profile-row">
@@ -364,21 +392,32 @@
   /* ============================================================ WUWA */
   function renderWuwa() {
     const g = D.wuwa;
-    const hero = pageHero({ badge: `wuwa.build · UID ${g.uid} · import requis`, title: 'Wuthering Waves', accentVars: '--art-c1: rgba(23,169,196,0.4); --art-c2: rgba(22,184,148,0.2); --art-c3: rgba(255,255,255,0.25);' });
-    const body = `<div class="page-body"><div class="detail-content">
-      <div class="note" style="text-align:left; border-top:none; padding-top:0;">
-        J'ai trouvé un vrai tracker pour ton UID : <a href="${g.tracker}" target="_blank" rel="noopener">WuWaBuilds</a> — ton profil <code>${g.uid}</code> (serveur ${g.server}) y existe déjà, ${esc(g.note)}
+    const best = g.characters.reduce((a, b) => (b.boardPct > a.boardPct ? b : a));
+    const hero = pageHero({
+      badge: `wuwa.build · UID ${g.uid} · ${esc(g.nickname)}`, title: 'Wuthering Waves',
+      art: g.heroArt,
+      rankImg: best.portrait, rankLabel: `${best.boardPct}% · ${esc(best.board)}`, rankSub: `${esc(best.name)} · #${fmtInt(best.rank)} / ${fmtInt(best.rankTotal)}`
+    });
+    const side = `
+      <div class="side-card">
+        <div class="profile-row">
+          <div class="profile-stat"><div class="profile-num">${g.buildsCount}</div><div class="profile-label">Builds trackés</div></div>
+          <div class="profile-stat"><div class="profile-num">${g.echoesCount}</div><div class="profile-label">Échos possédés</div></div>
+          <div class="profile-stat"><div class="profile-num">${best.boardPct}%</div><div class="profile-label">Meilleur board (${esc(best.name)})</div></div>
+          <div class="profile-stat"><div class="profile-num">${g.server}</div><div class="profile-label">Serveur</div></div>
+        </div>
       </div>
-      ${sectionLabel('Comment débloquer ce royaume')}
-      <ol style="font-family:'Poppins',sans-serif; font-size:12.5px; color:var(--ink-soft); line-height:1.9; padding-left:20px; margin:8px 0 4px;">
-        ${g.steps.map(s => `<li>${s}</li>`).join('')}
-      </ol>
-      ${sectionLabel('Ce qui apparaîtra ici')}
-      <div class="overview-strip" style="opacity:0.55;">
-        ${g.locked.map(l => `<div class="overview-tile"><div class="overview-num">—</div><div class="overview-label">${esc(l)}</div></div>`).join('')}
-      </div>
-    </div></div>`;
-    $content.innerHTML = hero + body;
+      <div class="side-card">${sectionLabel('Faits marquants')}${highlightGrid(g.characters.map(c => ({ title: `${esc(c.name)} — ${c.boardPct}% (${esc(c.board)})`, text: `#${fmtInt(c.rank)} / ${fmtInt(c.rankTotal)} mondial · ${c.critValue} CV` })).concat([{ title: `${esc(g.echoes[0].name)} — ${fmt1(g.echoes[0].cv)} CV`, text: `Meilleur écho (${g.echoes[0].rv}% RV)` }]))}</div>
+      <div class="side-card">${sectionLabel('Armes')}${chipRow(g.characters.map(c => ({ img: c.weapon.icon, text: `${c.weapon.name} (${c.weapon.refine})`, small: c.name })))}</div>
+      <div class="side-card"><div class="note" style="border-top:none; padding-top:0;">Profil <a href="${g.tracker}" target="_blank" rel="noopener">WuWaBuilds</a> — ${esc(g.note)}</div></div>
+    `;
+    const main = `
+      ${sectionLabel('Résonateurs')}
+      ${g.characters.map(wuwaCharBlock).join('')}
+      ${sectionLabel(`Échos (${g.echoesCount})`)}
+      ${echoTable(g.echoes)}
+    `;
+    $content.innerHTML = pageShell(hero, side, main);
   }
 
   /* ---------- router ---------- */
@@ -443,17 +482,36 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
   };
+  const EXPORT_SLUGS = { home: 'vue-ensemble', lol: 'league-of-legends', valorant: 'valorant', tft: 'tft', genshin: 'genshin-impact', hsr: 'honkai-star-rail', wuwa: 'wuthering-waves' };
+  const DAY_BG = 'linear-gradient(160deg, #E7DCF5 0%, #F6E3EA 38%, #FBEEDD 68%, #EFE6F7 100%)';
+  const NIGHT_BG = 'linear-gradient(160deg, #1B1730 0%, #241A2E 38%, #2A1F2C 68%, #1E1A30 100%)';
   function initExport() {
     document.getElementById('exportBtn').addEventListener('click', async () => {
       showToast('Génération de l\'image en cours…');
+      const content = document.getElementById('content');
+      const prevBg = content.style.background;
+      // #content itself has no background (the pastel/night gradient lives on <body>) — html2canvas
+      // only rasterizes what's inside the captured element, so without this the glass cards and
+      // flowing (card-less) sections would export with a transparent/empty backdrop.
+      content.style.background = document.body.classList.contains('night') ? NIGHT_BG : DAY_BG;
+      // scrollable panels (e.g. the full champion table) only show their scrolled-into-view slice
+      // to html2canvas — expand them so the export includes every row, not just the first screenful.
+      const scrollers = content.querySelectorAll('.champ-table-wrap');
+      const prevScroll = Array.from(scrollers).map(el => ({ maxHeight: el.style.maxHeight, overflow: el.style.overflow }));
+      scrollers.forEach(el => { el.style.maxHeight = 'none'; el.style.overflow = 'visible'; });
       try {
-        const canvas = await html2canvas(document.getElementById('content'), { backgroundColor: null, scale: 2, useCORS: true });
+        const canvas = await html2canvas(content, { backgroundColor: null, scale: 2, useCORS: true });
+        const slug = EXPORT_SLUGS[currentRoute()] || currentRoute();
         const link = document.createElement('a');
-        link.download = 'alnrfLO-codex.png';
+        link.download = `alnrfLO-${slug}.png`;
         link.href = canvas.toDataURL('image/png');
         link.click();
         showToast('Image téléchargée ✦');
       } catch (e) { showToast('Export impossible depuis ce navigateur — essaie une capture d\'écran.'); }
+      finally {
+        content.style.background = prevBg;
+        scrollers.forEach((el, i) => { el.style.maxHeight = prevScroll[i].maxHeight; el.style.overflow = prevScroll[i].overflow; });
+      }
     });
   }
 

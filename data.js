@@ -12,7 +12,7 @@ window.DASH_DATA = {
     { id: "tft",      name: "Teamfight Tactics",   short: "TFT",     avatar: "https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon6860.jpg?image=q_auto:good,f_png,w_200", source: "op.gg",        status: "active" },
     { id: "genshin",  name: "Genshin Impact",      short: "GI",      avatar: "https://enka.network/ui/UI_AvatarIcon_Furina.png", source: "enka.network", status: "active" },
     { id: "hsr",      name: "Honkai: Star Rail",   short: "HSR",     avatar: "https://enka.network/ui/hsr/SpriteOutput/AvatarRoundIcon/AvatarSkin/1140701.png", source: "enka.network", status: "active" },
-    { id: "wuwa",     name: "Wuthering Waves",     short: "WuWa",    avatar: null, source: "wuwa.build",   status: "pending" }
+    { id: "wuwa",     name: "Wuthering Waves",     short: "WuWa",    avatar: "https://wuwa.build/assets/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_57_UI.webp", source: "wuwa.build",   status: "active" }
   ],
 
   lol: {
@@ -102,7 +102,7 @@ window.DASH_DATA = {
     accountLevel: 51,
     act: "V26 Acte 4",
     rank: "Argent 1",
-    heroArt: null,
+    heroArt: "https://media.valorant-api.com/playercards/faa3c3b5-4b0b-1f20-b383-01b7b83126ff/wideart.png",
     rankEmblem: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/9/largeicon.png",
     playerCard: "https://c-valorant-api.op.gg/Assets/PlayerCards/FAA3C3B5-4B0B-1F20-B383-01B7B83126FF_small.png?image=q_auto:good,f_png,w_128",
     winrate: 54, wins: 20, losses: 16, remakes: 1,
@@ -161,20 +161,55 @@ window.DASH_DATA = {
     adventureRank: 56, worldLevel: 8, achievements: 555, spiralAbyss: "8-3", stygianOnslaught: "107s",
     heroArt: "https://enka.network/ui/UI_Gacha_AvatarImg_Varesa.png",
     profileIcon: "https://enka.network/ui/UI_AvatarIcon_Furina.png",
-    showcase: {
-      name: "Varesa", element: "Électro", portrait: "https://enka.network/ui/UI_AvatarIcon_Varesa.png",
-      level: "90/90", talents: "10/10/5",
-      weapon: { name: "The Widsith R2", level: "90/90", icon: "https://enka.network/ui/UI_EquipIcon_Catalyst_Troupe_Awaken.png" },
-      artifactSet: "Long Night's Oath 4pc",
-      stats: { hp: 18415, atk: 1656, def: 968, elementalMastery: 93, critRate: 61.1, critDmg: 244.2, energyRecharge: 125.3, bonusDmg: { label: "Bonus DGT Électro", value: 46.6 } }
-    },
-    highlights: [
-      { emoji: "⚡", title: "Varesa · Électro", text: "Vitrine — Niv. 90/90, talents 10/10/5" },
-      { emoji: "💎", title: "61,1% crit · 244,2% dgt crit", text: "Ratio critique de la vitrine (build DPS)" },
-      { emoji: "🌀", title: "Abîme Spiralé 8-3", text: "Chambre la plus profonde nettoyée" },
-      { emoji: "🏅", title: "555 hauts faits", text: "Débloqués sur le compte" }
+    characters: [
+      {
+        name: "Kaedehara Kazuha", element: "Anémo", portrait: "https://enka.network/ui/UI_AvatarIcon_Kazuha.png",
+        level: "90/90",
+        weapon: { name: "Piqûre de fer", rarity: 4, refine: "R3", level: "90/90" },
+        set: "Ombre de la Verte Chasseuse (4)",
+        stats: { hp: 21812, atk: 1591, def: 983, elementalMastery: 654, critRate: 24.8, critDmg: 116.1, energyRecharge: 138.2, bonusDmg: { label: "Bonus DGT Anémo", value: 15.0 } },
+        critValue: 105.7
+      },
+      {
+        name: "Columbina", element: "Hydro", portrait: "https://enka.network/ui/UI_AvatarIcon_Columbina.png",
+        level: "90/90",
+        weapon: { name: "Reliquaire de la vérité", rarity: 5, refine: "R1", level: "90/90" },
+        set: "Aubade d'astre et de lune (4)",
+        stats: { hp: 35970, atk: 1094, def: 620, elementalMastery: 80, critRate: 66.8, critDmg: 228.4, energyRecharge: 118.8 },
+        critValue: 159.4
+      },
+      {
+        name: "Chasca", element: "Géo", portrait: "https://enka.network/ui/UI_AvatarIcon_Chasca.png",
+        level: "90/90",
+        weapon: { name: "Ailes de la Voûte d'Azur", rarity: 5, refine: "R1", level: "90/90" },
+        set: "Chasseur de la Maréchaussée (4)",
+        stats: { hp: 15742, atk: 2036, def: 646, elementalMastery: 47, critRate: 82.4, critDmg: 180.4, energyRecharge: 109.7, bonusDmg: { label: "Bonus DGT Géo", value: 7.0 } },
+        critValue: 182.7
+      },
+      {
+        name: "Furina", element: "Hydro", portrait: "https://enka.network/ui/UI_AvatarIcon_Furina.png",
+        level: "90/90",
+        weapon: { name: "Splendeur des eaux calmes", rarity: 5, refine: "R1", level: "90/90" },
+        set: "Troupe dorée (4)",
+        stats: { hp: 24788, atk: 1269, def: 696, elementalMastery: 63, critRate: 70.1, critDmg: 247.8, energyRecharge: 179.0, bonusDmg: { label: "Bonus DGT Hydro", value: 46.6 } },
+        critValue: 201.3, topPercent: 39, buildLabel: "Skill · 170% ER"
+      },
+      {
+        name: "Varesa", element: "Électro", portrait: "https://enka.network/ui/UI_AvatarIcon_Varesa.png",
+        level: "90/90",
+        weapon: { name: "Mouvement vagabond", rarity: 4, refine: "R2", level: "90/90" },
+        set: "Serment de la longue nuit (4)",
+        stats: { hp: 18415, atk: 1656, def: 968, elementalMastery: 93, critRate: 61.1, critDmg: 244.2, energyRecharge: 125.3, bonusDmg: { label: "Bonus DGT Électro", value: 46.6 } },
+        critValue: 213.0, topPercent: 47, buildLabel: "Hyper · 120% ER"
+      }
     ],
-    note: "Seul le personnage mis en avant dans ta vitrine Enka est visible publiquement. Active le partage complet en jeu et redemande-moi une mise à jour pour afficher tout ton roster."
+    highlights: [
+      { emoji: "💎", title: "Varesa — 213 CV", text: "Meilleure Crit Value du roster (61,1% crit · 244,2% dgt crit)" },
+      { emoji: "🏆", title: "Varesa — TOP 47%", text: "Classement Akasha (build Hyper, 120% Recharge Énergie)" },
+      { emoji: "🎏", title: "Furina — TOP 39%", text: "Classement Akasha (build Skill, 170% Recharge Énergie)" },
+      { emoji: "🌀", title: "Abîme Spiralé 8-3", text: "Chambre la plus profonde nettoyée" }
+    ],
+    note: "5 personnages entièrement build trackés via Akasha.cv (Kazuha, Columbina, Chasca, Furina, Varesa) — un vrai board de leaderboard Genshin, contrairement à Enka qui ne montre que le personnage mis en avant dans ta vitrine."
   },
 
   hsr: {
@@ -182,6 +217,7 @@ window.DASH_DATA = {
     nickname: "Emma",
     signature: "« idk »",
     trailblazeLevel: 70, equilibriumLevel: 6, achievements: 588, simulatedUniverse: 9,
+    heroArt: "https://enka.network/ui/hsr/SpriteOutput/AvatarDrawCard/1407.png",
     profileIcon: "https://enka.network/ui/hsr/SpriteOutput/AvatarRoundIcon/AvatarSkin/1140701.png",
     showcase: {
       name: "Castorice", element: "Quantique", portrait: "https://enka.network/ui/hsr/SpriteOutput/AvatarRoundIcon/AvatarSkin/1140701.png",
@@ -200,16 +236,39 @@ window.DASH_DATA = {
   },
 
   wuwa: {
-    uid: "576656267", server: "NA",
-    tracker: "https://wuwa.build/profile/576656267",
-    status: "Profil trouvé sur WuWaBuilds — import manuel requis",
-    note: "mais aucune donnée n'est encore synchronisée (0 build, 0 écho). Contrairement à Enka pour Genshin/HSR, WuWaBuilds n'a pas d'accès automatique à ton compte : il faut lui envoyer un import une fois.",
-    steps: [
-      "Rejoins le serveur Discord de WuWaBuilds et génère ta carte avec <b>wuwa-bot</b> (elle capture ton niveau d'Union, tes Résonateurs et leurs échos).",
-      "Va sur wuwa.build/import et dépose la capture d'écran générée par le bot (glisser-déposer, ou Ctrl+V).",
-      "Une fois importé, redemande-moi <i>« rafraîchis mon Wuthering Waves »</i> — j'irai lire ton profil WuWaBuilds et graver ici tes vraies stats."
+    uid: "605245370", server: "EU", nickname: "Lou",
+    heroArt: "https://static.wikia.nocookie.net/wutheringwaves/images/c/ca/Chisa_Card.jpg",
+    tracker: "https://wuwa.build/profile/605245370",
+    buildsCount: 2, echoesCount: 10,
+    characters: [
+      {
+        name: "Cartethyia", portrait: "https://wuwa.build/assets/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_40_UI.webp",
+        sequence: "S0", board: "Solo", boardPct: 80.3, rank: 2005, rankTotal: 2497,
+        weapon: { name: "Defier's Thorn", refine: "R1", icon: "https://wuwa.build/assets/UIResources/Common/Image/IconWeapon/T_IconWeapon21020056_UI.webp" },
+        set: "Windward Pilgrimage (5)",
+        critValue: 102.8, critRate: 64.4, critDmg: 150.0
+      },
+      {
+        name: "Chisa", portrait: "https://wuwa.build/assets/UIResources/Common/Image/IconRoleHead256/T_IconRoleHead256_57_UI.webp",
+        sequence: "S0", board: "Hypercarry", boardPct: 84.7, rank: 789, rankTotal: 931,
+        weapon: { name: "Lustrous Razor", refine: "R1", icon: "https://wuwa.build/assets/UIResources/Common/Image/IconWeapon/T_IconWeapon21010015_UI.webp" },
+        set: "Havoc Eclipse (2)",
+        critValue: 71.6, critRate: 19.3, critDmg: 209.0
+      }
     ],
-    locked: ["Niveau d'Union", "Résonateurs débloqués", "Tour des Illusions", "Échos collectés"]
+    echoes: [
+      { name: "Devotee's Flesh", set: "Windward Pilgrimage", mainStat: "22.8%", cv: 17.4, rv: 84, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31061_UI.webp" },
+      { name: "Havoc Dreadmane", set: "Havoc Eclipse", mainStat: "30.0%", cv: 15.0, rv: 74, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterGoods/T_IconMonsterGoods_984_UI.webp" },
+      { name: "Sacerdos", set: "Windward Pilgrimage", mainStat: "22.8%", cv: 15.0, rv: 71, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31054_UI.webp" },
+      { name: "Kerasaur", set: "Windward Pilgrimage", mainStat: "30.0%", cv: 13.8, rv: 66, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31062_UI.webp" },
+      { name: "Dreamless", set: "Havoc Eclipse", mainStat: "44.0%", cv: 12.6, rv: 81, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_998_UI.webp" },
+      { name: "Capitaneus", set: "Windward Pilgrimage", mainStat: "30.0%", cv: 12.6, rv: 82, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_32033_UI.webp" },
+      { name: "Calcified Junrock", set: "Crown of Valor", mainStat: "18.0%", cv: 0.0, rv: 0, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31050_UI.webp" },
+      { name: "Fusion Drake", set: "Windward Pilgrimage", mainStat: "18.0%", cv: 0.0, rv: 0, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_31058_UI.webp" },
+      { name: "Nightmare: Cyan-Feathered Heron", set: "Law of Harmony", mainStat: "30.0%", cv: 0.0, rv: 75, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_32046_UI.webp" },
+      { name: "Reminiscence: Fleurdelys", set: "Windward Pilgrimage", mainStat: "22.0%", cv: 0.0, rv: 65, icon: "https://wuwa.build/assets/UIResources/Common/Image/IconMonsterHead/T_IconMonsterHead_34012_1_UI.webp" }
+    ],
+    note: "Synchronisé automatiquement depuis WuWaBuilds (mise à jour côté site toutes les 5 minutes) — regénère simplement ta carte avec wuwa-bot puis réimporte sur wuwa.build/import si tu changes de build."
   },
 
   overview: {
@@ -224,7 +283,7 @@ window.DASH_DATA = {
       { emoji: "🌳", title: "Rhaast — 2,5 place moy.", text: "Meilleure unité (TFT · 6 parties)" },
       { emoji: "🌸", title: "Varesa — Niv. 90/90", text: "Vitrine Genshin · 61,1% crit / 244,2% dgt crit" },
       { emoji: "🌙", title: "Castorice — Éidolon 6", text: "Vitrine HSR · 64,5% crit / 203,2% dgt crit" },
-      { emoji: "🌊", title: "5 royaumes actifs", text: "Wuthering Waves — profil trouvé, import en attente" }
+      { emoji: "🌊", title: "Chisa — 84,7% (Hypercarry)", text: "Wuthering Waves · meilleur board WuWaBuilds" }
     ]
   }
 };
