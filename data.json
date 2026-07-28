@@ -1,0 +1,121 @@
+{
+  "player": {
+    "riotId": "alnrfLO#93K",
+    "region": "EUW",
+    "season": "2026"
+  },
+  "lol": {
+    "summonerLevel": 248,
+    "ladderRank": 1368563,
+    "ladderPercentile": 44.15,
+    "soloDuo": { "tier": "Gold 2", "lp": 26, "wins": 29, "losses": 36, "winrate": 45 },
+    "flex": { "tier": "Gold 4", "lp": 69, "wins": 54, "losses": 53, "winrate": 50 },
+    "seasonHistorySoloDuo": [
+      { "season": "S2025", "tier": "Gold 2", "lp": 40 },
+      { "season": "S2024 S3", "tier": "Gold 2", "lp": 21 },
+      { "season": "S2024 S2", "tier": "Bronze 4", "lp": 7 },
+      { "season": "S2024 S1", "tier": "Bronze 4", "lp": 53 },
+      { "season": "S2023 S2", "tier": "Bronze 4", "lp": 45 }
+    ],
+    "mastery": [
+      { "champion": "Yasuo", "points": 375231 },
+      { "champion": "Lux", "points": 200046 },
+      { "champion": "Caitlyn", "points": 145675 },
+      { "champion": "Sylas", "points": 111381 }
+    ],
+    "champions": [
+      { "champion": "Caitlyn", "wins": 25, "losses": 26, "kda": 2.54, "csPerMin": 2026.8 },
+      { "champion": "Ezreal", "wins": 14, "losses": 12, "kda": 2.90, "csPerMin": 1896.1 },
+      { "champion": "Yasuo", "wins": 14, "losses": 11, "kda": 2.11, "csPerMin": 2056.8 },
+      { "champion": "Mel", "wins": 5, "losses": 7, "kda": 3.26, "csPerMin": 2016.4 },
+      { "champion": "Lux", "wins": 3, "losses": 2, "kda": 2.50, "csPerMin": 863.5 }
+    ],
+    "updatedAt": "2026-07-27"
+  },
+  "valorant": {
+    "accountLevel": 51,
+    "act": "V26 Acte 4",
+    "rank": "Argent 1",
+    "winrate": 54,
+    "wins": 20,
+    "losses": 16,
+    "stats": {
+      "damagePerRound": 130,
+      "kd": 0.77,
+      "kda": 1.16,
+      "acsPerRound": 193.2,
+      "bestMatchKills": 23,
+      "playtime": "20h 43m",
+      "headshotPct": 10.77,
+      "bodyshotPct": 79.04,
+      "legshotPct": 10.19,
+      "kills": 488,
+      "deaths": 637,
+      "assists": 253
+    },
+    "roles": [
+      { "role": "Contrôleur", "kda": 1.10, "winrate": 44, "wins": 12, "losses": 14 },
+      { "role": "Sentinelle", "kda": 2.04, "winrate": 100, "wins": 5, "losses": 0 },
+      { "role": "Duelliste", "kda": 0.95, "winrate": 60 }
+    ],
+    "last20Matches": {
+      "wins": 8, "remakes": 1, "losses": 11, "winrate": 40,
+      "opScore": 428, "roundWinPct": 48.1, "kast": 68.3, "avgAcs": 194.3, "adr": -26.1
+    },
+    "updatedAt": "2026-07-27"
+  },
+  "tft": {
+    "ranked": { "tier": "Silver II", "lp": 86, "wins": 12, "losses": 8, "top4Rate": 60, "avgPlacement": 3.95, "games": 20 },
+    "hyperRoll": { "tier": "Bronze I", "lp": 87 },
+    "topTraits": [
+      { "trait": "Bagarreur", "games": 11, "avgPlacement": 3.27 },
+      { "trait": "N.O.V.A.", "games": 8, "avgPlacement": 3.25 }
+    ],
+    "topChampions": [
+      { "champion": "Maokai", "games": 12, "avgPlacement": 3.5 },
+      { "champion": "Rek'Sai", "games": 7, "avgPlacement": 4.43 }
+    ],
+    "updatedAt": "2026-07-27"
+  },
+  "genshin": {
+    "uid": "707095481",
+    "nickname": "lou",
+    "adventureRank": 56,
+    "worldLevel": 8,
+    "achievements": 555,
+    "spiralAbyss": "8-3",
+    "showcaseCharacter": {
+      "name": "Varesa",
+      "level": "90/90",
+      "weapon": "The Widsith R2",
+      "artifactSet": "Long Night's Oath 4pc",
+      "stats": { "hp": 18415, "atk": 1656, "def": 968, "elementalMastery": 93, "critRate": 61.1, "critDmg": 244.2, "energyRecharge": 125.3 }
+    },
+    "note": "Seul le personnage en vitrine Enka est public. Activer le partage complet pour le roster entier.",
+    "updatedAt": "2026-07-27"
+  },
+  "hsr": {
+    "uid": "721212389",
+    "nickname": "Emma",
+    "trailblazeLevel": 70,
+    "equilibriumLevel": 6,
+    "achievements": 588,
+    "simulatedUniverse": 9,
+    "showcaseCharacter": {
+      "name": "Castorice",
+      "level": "80/80",
+      "eidolon": 6,
+      "lightCone": "Make Farewells More Beautiful S1",
+      "relicSets": ["Poet of Mourning Collapse 4pc", "Bone Collection's Serene Demesne 2pc"],
+      "stats": { "hp": 7923, "atk": 1492, "def": 1246, "spd": 89.7, "critRate": 64.5, "critDmg": 203.2 }
+    },
+    "note": "Seul le personnage en vitrine Enka est public.",
+    "updatedAt": "2026-07-27"
+  },
+  "wuwa": {
+    "uid": "576656267",
+    "server": "NA",
+    "tracker": "https://wuwa.build/profile/576656267",
+    "note": "Profil WuWaBuilds trouvé (0 build / 0 écho synchronisé). Import manuel requis via wuwa-bot (Discord) + wuwa.build/import avant de pouvoir afficher de vraies stats."
+  }
+}
