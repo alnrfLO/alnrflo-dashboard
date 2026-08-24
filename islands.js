@@ -39,26 +39,49 @@
     return v || fallback;
   }
 
-  function makeIsland(colorHex) {
+  // Displaces every vertex outward/inward by a random amount so a perfect
+  // icosahedron reads as a rough, hand-carved rock instead of a gemstone.
+  function jitterGeometry(geometry, amount, seed) {
+    const pos = geometry.attributes.position;
+    const v = new THREE.Vector3();
+    let s = seed;
+    const rand = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i);
+      const n = v.clone().normalize();
+      v.addScaledVector(n, (rand() - 0.35) * amount);
+      pos.setXYZ(i, v.x, v.y, v.z);
+    }
+    geometry.computeVertexNormals();
+    return geometry;
+  }
+
+  function makeIsland(colorHex, seed) {
     const g = new THREE.Group();
-    const rock = new THREE.Mesh(
-      new THREE.ConeGeometry(1.05, 1.3, 7),
-      new THREE.MeshStandardMaterial({ color: 0x8a7b6d, roughness: 0.95, flatShading: true })
+
+    // rocky, irregular underside
+    const rockGeo = jitterGeometry(new THREE.IcosahedronGeometry(1.15, 1), 0.22, seed);
+    rockGeo.scale(1, 0.6, 1);
+    const rock = new THREE.Mesh(rockGeo, new THREE.MeshStandardMaterial({ color: 0xa9927a, roughness: 1, flatShading: true }));
+    rock.position.y = -0.28;
+    g.add(rock);
+
+    // grassy colored cap, sitting into the top of the rock
+    const topGeo = jitterGeometry(new THREE.IcosahedronGeometry(1.12, 1), 0.14, seed + 17);
+    topGeo.scale(1, 0.34, 1);
+    const top = new THREE.Mesh(topGeo, new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.8, flatShading: true }));
+    top.position.y = 0.24;
+    g.add(top);
+
+    // small glowing crystal landmark, one per game, spins independently
+    const crystal = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.26, 0),
+      new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.2, metalness: 0.2, emissive: colorHex, emissiveIntensity: 0.35, flatShading: true })
     );
-    rock.rotation.x = Math.PI;
-    rock.position.y = -0.35;
-    const top = new THREE.Mesh(
-      new THREE.CylinderGeometry(1.2, 1.05, 0.42, 7),
-      new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.75, flatShading: true })
-    );
-    top.position.y = 0.5;
-    g.add(rock, top);
-    const bump = new THREE.Mesh(
-      new THREE.ConeGeometry(0.26, 0.55, 6),
-      new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.75, flatShading: true })
-    );
-    bump.position.set(0.42, 0.98, 0.18);
-    g.add(bump);
+    crystal.position.y = 0.95;
+    g.add(crystal);
+    g.userData.crystal = crystal;
+
     return g;
   }
 
@@ -99,7 +122,7 @@
     const count = games.length;
     meshes = games.map((game, i) => {
       const color = cssColor(game.colorVar, game.fallback);
-      const island = makeIsland(new THREE.Color(color));
+      const island = makeIsland(new THREE.Color(color), i * 137 + 41);
       const angle = angleFor(i, count);
       island.position.set(Math.sin(angle) * radius, 0, Math.cos(angle) * radius);
       island.userData.gameId = game.id;
@@ -147,7 +170,7 @@
         isl.scale.setScalar(s);
         if (!reduceMotion) {
           isl.position.y = Math.sin(t * 1.2 + isl.userData.phase) * 0.1;
-          isl.rotation.y = t * 0.25;
+          if (isl.userData.crystal) isl.userData.crystal.rotation.y = t * 0.8;
         }
       });
       renderer.render(scene, camera);
