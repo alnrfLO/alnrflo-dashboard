@@ -5,6 +5,10 @@
    ============================================================ */
 window.DASH_DATA = {
   player: { riotId: "alnrfLO#93K", region: "EUW", season: "2026", updated: "27 juillet 2026" },
+  // real Riot account behind the "alnrfLO" handle above (op.gg still shows the old
+  // pre-rename name) — used only by scripts/refresh-data.mjs to query the Riot API,
+  // never displayed anywhere.
+  riotAccount: { gameName: "Byron Love", tagLine: "93K", platform: "euw1" },
 
   games: [
     { id: "lol",      name: "League of Legends",  short: "LoL",     avatar: "https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon6860.jpg?image=q_auto:good,f_png,w_200", source: "op.gg",        status: "active" },
@@ -16,85 +20,414 @@ window.DASH_DATA = {
   ],
 
   lol: {
-    summonerLevel: 248,
-    ladderRank: 1368563,
-    ladderPercentile: 44.15,
-    heroArt: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Yasuo_0.jpg",
-    rankEmblem: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblem/emblem-gold.png",
-    profileIcon: "https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon6860.jpg?image=q_auto:good,f_png,w_200",
-    seasonTotals: { wins: 83, losses: 89, winrate: 48, champsPlayed: 31 },
-    queues: {
-      soloDuo: { tier: "Gold 2", lp: 26, wins: 29, losses: 36, winrate: 45 },
-      flex:    { tier: "Gold 4", lp: 69, wins: 54, losses: 53, winrate: 50 }
+    "summonerLevel": 254,
+    "ladderRank": 1368563,
+    "ladderPercentile": 44.15,
+    "heroArt": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Yasuo_0.jpg",
+    "rankEmblem": "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblem/emblem-platinum.png",
+    "profileIcon": "https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon6806.jpg?image=q_auto:good,f_png,w_200",
+    "seasonTotals": {
+      "wins": 83,
+      "losses": 89,
+      "winrate": 48,
+      "champsPlayed": 31
     },
-    lpHistory: [
-      { season: "S23S2", lp: 45 }, { season: "S24S1", lp: 53 }, { season: "S24S2", lp: 7 },
-      { season: "S24S3", lp: 21 }, { season: "S25", lp: 40 }, { season: "S26", lp: 26 }
+    "queues": {
+      "soloDuo": {
+        "tier": "Platinum 4",
+        "lp": 17,
+        "wins": 41,
+        "losses": 40,
+        "winrate": 51
+      },
+      "flex": {
+        "tier": "Gold 4",
+        "lp": 86,
+        "wins": 56,
+        "losses": 54,
+        "winrate": 51
+      }
+    },
+    "lpHistory": [
+      {
+        "season": "S23S2",
+        "lp": 45
+      },
+      {
+        "season": "S24S1",
+        "lp": 53
+      },
+      {
+        "season": "S24S2",
+        "lp": 7
+      },
+      {
+        "season": "S24S3",
+        "lp": 21
+      },
+      {
+        "season": "S25",
+        "lp": 40
+      },
+      {
+        "season": "S26",
+        "lp": 26
+      }
     ],
-    seasonHistory: {
-      soloDuo: [
-        { season: "S2025", tier: "Gold 2", lp: 40 }, { season: "S2024 S3", tier: "Gold 2", lp: 21 },
-        { season: "S2024 S2", tier: "Bronze 4", lp: 7 }, { season: "S2024 S1", tier: "Bronze 4", lp: 53 },
-        { season: "S2023 S2", tier: "Bronze 4", lp: 45 }
+    "seasonHistory": {
+      "soloDuo": [
+        {
+          "season": "S2025",
+          "tier": "Gold 2",
+          "lp": 40
+        },
+        {
+          "season": "S2024 S3",
+          "tier": "Gold 2",
+          "lp": 21
+        },
+        {
+          "season": "S2024 S2",
+          "tier": "Bronze 4",
+          "lp": 7
+        },
+        {
+          "season": "S2024 S1",
+          "tier": "Bronze 4",
+          "lp": 53
+        },
+        {
+          "season": "S2023 S2",
+          "tier": "Bronze 4",
+          "lp": 45
+        }
       ],
-      flex: [
-        { season: "S2025", tier: "Silver 4", lp: 84 }, { season: "S2024 S1", tier: "Platine 4", lp: 0 }
+      "flex": [
+        {
+          "season": "S2025",
+          "tier": "Silver 4",
+          "lp": 84
+        },
+        {
+          "season": "S2024 S1",
+          "tier": "Platine 4",
+          "lp": 0
+        }
       ]
     },
-    mastery: [
-      { champion: "Yasuo", points: 375231 }, { champion: "Lux", points: 200046 },
-      { champion: "Caitlyn", points: 145675 }, { champion: "Sylas", points: 111381 }
+    "mastery": [
+      {
+        "champion": "Yasuo",
+        "points": 375231
+      },
+      {
+        "champion": "Lux",
+        "points": 200046
+      },
+      {
+        "champion": "Caitlyn",
+        "points": 145675
+      },
+      {
+        "champion": "Sylas",
+        "points": 111381
+      }
     ],
-    champions: [
-      { champion: "Caitlyn", wins: 25, losses: 26, kda: 2.54, csPerMin: 2026.8 },
-      { champion: "Ezreal", wins: 14, losses: 12, kda: 2.90, csPerMin: 1896.1 },
-      { champion: "Yasuo", wins: 14, losses: 11, kda: 2.11, csPerMin: 2056.8 },
-      { champion: "Mel", wins: 5, losses: 7, kda: 3.26, csPerMin: 2016.4 },
-      { champion: "Lux", wins: 3, losses: 2, kda: 2.50, csPerMin: 863.5 },
-      { champion: "Shaco", wins: 2, losses: 3, kda: 2.97, csPerMin: 1845.4 },
-      { champion: "Vayne", wins: 2, losses: 2, kda: 2.31, csPerMin: 1915.8 },
-      { champion: "Yone", wins: 2, losses: 2, kda: 2.25, csPerMin: 2396.5 },
-      { champion: "Kaisa", label: "Kai'Sa", wins: 2, losses: 2, kda: 2.29, csPerMin: 1656.6 },
-      { champion: "Vladimir", wins: 1, losses: 3, kda: 1.80, csPerMin: 2026.2 },
-      { champion: "Ashe", wins: 1, losses: 2, kda: 1.47, csPerMin: 1736.3 },
-      { champion: "Kayn", wins: 0, losses: 3, kda: 1.89, csPerMin: 1825.0 },
-      { champion: "Viego", wins: 0, losses: 3, kda: 1.82, csPerMin: 2236.4 },
-      { champion: "Zed", wins: 2, losses: 0, kda: 2.20, csPerMin: 1425.9 },
-      { champion: "Lucian", wins: 1, losses: 1, kda: 1.25, csPerMin: 1436.5 },
-      { champion: "Leona", wins: 1, losses: 1, kda: 4.80, csPerMin: 331.2 },
-      { champion: "Sylas", wins: 1, losses: 1, kda: 1.00, csPerMin: 1334.7 },
-      { champion: "Yuumi", wins: 0, losses: 2, kda: 2.50, csPerMin: 230.9 },
-      { champion: "Smolder", wins: 1, losses: 0, kda: 4.00, csPerMin: 2056.1 },
-      { champion: "Yunara", wins: 1, losses: 0, kda: 3.00, csPerMin: 1896.1 },
-      { champion: "Jinx", wins: 1, losses: 0, kda: 5.25, csPerMin: 1615.6 },
-      { champion: "Fiddlesticks", wins: 1, losses: 0, kda: 9.00, csPerMin: 1747.0 },
-      { champion: "Neeko", wins: 1, losses: 0, kda: 2.17, csPerMin: 902.0 },
-      { champion: "Ahri", wins: 1, losses: 0, kda: 5.50, csPerMin: 1355.6 },
-      { champion: "Veigar", wins: 1, losses: 0, kda: 2.88, csPerMin: 1985.4 },
-      { champion: "Qiyana", wins: 0, losses: 1, kda: 1.75, csPerMin: 2806.6 },
-      { champion: "Diana", wins: 0, losses: 1, kda: 1.25, csPerMin: 1846.2 },
-      { champion: "Aurora", wins: 0, losses: 1, kda: 3.50, csPerMin: 1805.5 },
-      { champion: "Varus", wins: 0, losses: 1, kda: 1.57, csPerMin: 1555.3 },
-      { champion: "Nasus", wins: 0, losses: 1, kda: 1.71, csPerMin: 1534.5 },
-      { champion: "Nunu", label: "Nunu et Willump", wins: 0, losses: 1, kda: 1.36, csPerMin: 1605.2 }
+    "champions": [
+      {
+        "champion": "Caitlyn",
+        "wins": 25,
+        "losses": 26,
+        "kda": 2.54,
+        "csPerMin": 2026.8
+      },
+      {
+        "champion": "Ezreal",
+        "wins": 14,
+        "losses": 12,
+        "kda": 2.9,
+        "csPerMin": 1896.1
+      },
+      {
+        "champion": "Yasuo",
+        "wins": 14,
+        "losses": 11,
+        "kda": 2.11,
+        "csPerMin": 2056.8
+      },
+      {
+        "champion": "Mel",
+        "wins": 5,
+        "losses": 7,
+        "kda": 3.26,
+        "csPerMin": 2016.4
+      },
+      {
+        "champion": "Lux",
+        "wins": 3,
+        "losses": 2,
+        "kda": 2.5,
+        "csPerMin": 863.5
+      },
+      {
+        "champion": "Shaco",
+        "wins": 2,
+        "losses": 3,
+        "kda": 2.97,
+        "csPerMin": 1845.4
+      },
+      {
+        "champion": "Vayne",
+        "wins": 2,
+        "losses": 2,
+        "kda": 2.31,
+        "csPerMin": 1915.8
+      },
+      {
+        "champion": "Yone",
+        "wins": 2,
+        "losses": 2,
+        "kda": 2.25,
+        "csPerMin": 2396.5
+      },
+      {
+        "champion": "Kaisa",
+        "label": "Kai'Sa",
+        "wins": 2,
+        "losses": 2,
+        "kda": 2.29,
+        "csPerMin": 1656.6
+      },
+      {
+        "champion": "Vladimir",
+        "wins": 1,
+        "losses": 3,
+        "kda": 1.8,
+        "csPerMin": 2026.2
+      },
+      {
+        "champion": "Ashe",
+        "wins": 1,
+        "losses": 2,
+        "kda": 1.47,
+        "csPerMin": 1736.3
+      },
+      {
+        "champion": "Kayn",
+        "wins": 0,
+        "losses": 3,
+        "kda": 1.89,
+        "csPerMin": 1825
+      },
+      {
+        "champion": "Viego",
+        "wins": 0,
+        "losses": 3,
+        "kda": 1.82,
+        "csPerMin": 2236.4
+      },
+      {
+        "champion": "Zed",
+        "wins": 2,
+        "losses": 0,
+        "kda": 2.2,
+        "csPerMin": 1425.9
+      },
+      {
+        "champion": "Lucian",
+        "wins": 1,
+        "losses": 1,
+        "kda": 1.25,
+        "csPerMin": 1436.5
+      },
+      {
+        "champion": "Leona",
+        "wins": 1,
+        "losses": 1,
+        "kda": 4.8,
+        "csPerMin": 331.2
+      },
+      {
+        "champion": "Sylas",
+        "wins": 1,
+        "losses": 1,
+        "kda": 1,
+        "csPerMin": 1334.7
+      },
+      {
+        "champion": "Yuumi",
+        "wins": 0,
+        "losses": 2,
+        "kda": 2.5,
+        "csPerMin": 230.9
+      },
+      {
+        "champion": "Smolder",
+        "wins": 1,
+        "losses": 0,
+        "kda": 4,
+        "csPerMin": 2056.1
+      },
+      {
+        "champion": "Yunara",
+        "wins": 1,
+        "losses": 0,
+        "kda": 3,
+        "csPerMin": 1896.1
+      },
+      {
+        "champion": "Jinx",
+        "wins": 1,
+        "losses": 0,
+        "kda": 5.25,
+        "csPerMin": 1615.6
+      },
+      {
+        "champion": "Fiddlesticks",
+        "wins": 1,
+        "losses": 0,
+        "kda": 9,
+        "csPerMin": 1747
+      },
+      {
+        "champion": "Neeko",
+        "wins": 1,
+        "losses": 0,
+        "kda": 2.17,
+        "csPerMin": 902
+      },
+      {
+        "champion": "Ahri",
+        "wins": 1,
+        "losses": 0,
+        "kda": 5.5,
+        "csPerMin": 1355.6
+      },
+      {
+        "champion": "Veigar",
+        "wins": 1,
+        "losses": 0,
+        "kda": 2.88,
+        "csPerMin": 1985.4
+      },
+      {
+        "champion": "Qiyana",
+        "wins": 0,
+        "losses": 1,
+        "kda": 1.75,
+        "csPerMin": 2806.6
+      },
+      {
+        "champion": "Diana",
+        "wins": 0,
+        "losses": 1,
+        "kda": 1.25,
+        "csPerMin": 1846.2
+      },
+      {
+        "champion": "Aurora",
+        "wins": 0,
+        "losses": 1,
+        "kda": 3.5,
+        "csPerMin": 1805.5
+      },
+      {
+        "champion": "Varus",
+        "wins": 0,
+        "losses": 1,
+        "kda": 1.57,
+        "csPerMin": 1555.3
+      },
+      {
+        "champion": "Nasus",
+        "wins": 0,
+        "losses": 1,
+        "kda": 1.71,
+        "csPerMin": 1534.5
+      },
+      {
+        "champion": "Nunu",
+        "label": "Nunu et Willump",
+        "wins": 0,
+        "losses": 1,
+        "kda": 1.36,
+        "csPerMin": 1605.2
+      }
     ],
-    matchups: {
-      champion: "Caitlyn",
-      vs: [
-        { champion: "Smolder", wins: 2, losses: 5 }, { champion: "Jinx", wins: 2, losses: 4 },
-        { champion: "Ashe", wins: 3, losses: 2 }, { champion: "Jhin", wins: 2, losses: 3 },
-        { champion: "Kaisa", label: "Kai'Sa", wins: 1, losses: 3 }
+    "matchups": {
+      "champion": "Caitlyn",
+      "vs": [
+        {
+          "champion": "Smolder",
+          "wins": 2,
+          "losses": 5
+        },
+        {
+          "champion": "Jinx",
+          "wins": 2,
+          "losses": 4
+        },
+        {
+          "champion": "Ashe",
+          "wins": 3,
+          "losses": 2
+        },
+        {
+          "champion": "Jhin",
+          "wins": 2,
+          "losses": 3
+        },
+        {
+          "champion": "Kaisa",
+          "label": "Kai'Sa",
+          "wins": 1,
+          "losses": 3
+        }
       ]
     },
-    recommended: [
-      { champion: "Karthus", winrate: 54.0 }, { champion: "Xerath", winrate: 52.4 },
-      { champion: "Hwei", winrate: 52.4 }, { champion: "Zeri", winrate: 51.8 }, { champion: "Twitch", winrate: 50.8 }
+    "recommended": [
+      {
+        "champion": "Karthus",
+        "winrate": 54
+      },
+      {
+        "champion": "Xerath",
+        "winrate": 52.4
+      },
+      {
+        "champion": "Hwei",
+        "winrate": 52.4
+      },
+      {
+        "champion": "Zeri",
+        "winrate": 51.8
+      },
+      {
+        "champion": "Twitch",
+        "winrate": 50.8
+      }
     ],
-    highlights: [
-      { emoji: "🎯", title: "Caitlyn — 51 parties", text: "Champion le plus joué cette saison (49% WR)" },
-      { emoji: "🔥", title: "Yasuo — 56% WR", text: "Meilleur winrate sur échantillon significatif (25 parties)" },
-      { emoji: "💥", title: "Mel — 3,26:1 KDA", text: "Meilleur ratio KDA moyen (12 parties)" },
-      { emoji: "👑", title: "Yasuo — 375 231 pts", text: "Champion le plus maîtrisé (all-time)" }
+    "highlights": [
+      {
+        "emoji": "🎯",
+        "title": "Caitlyn — 51 parties",
+        "text": "Champion le plus joué cette saison (49% WR)"
+      },
+      {
+        "emoji": "🔥",
+        "title": "Yasuo — 56% WR",
+        "text": "Meilleur winrate sur échantillon significatif (25 parties)"
+      },
+      {
+        "emoji": "💥",
+        "title": "Mel — 3,26:1 KDA",
+        "text": "Meilleur ratio KDA moyen (12 parties)"
+      },
+      {
+        "emoji": "👑",
+        "title": "Yasuo — 375 231 pts",
+        "text": "Champion le plus maîtrisé (all-time)"
+      }
     ]
   },
 
@@ -129,28 +462,114 @@ window.DASH_DATA = {
   },
 
   tft: {
-    heroArt: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Maokai_0.jpg",
-    rankEmblem: "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblem/emblem-silver.png",
-    set: "Set 17",
-    ladderRank: 582412, ladderPercentile: 66,
-    ranked: { tier: "Silver II", lp: 86, wins: 12, losses: 8, top4Rate: 60, avgPlacement: 3.95, games: 20 },
-    hyperRoll: { tier: "Bronze I", lp: 87 },
-    placementDistribution: [1, 6, 1, 4, 5, 1, 0, 2],
-    topTraits: [
-      { trait: "Bagarreur", games: 11, avgPlacement: 3.27 }, { trait: "N.O.V.A.", games: 8, avgPlacement: 3.25 },
-      { trait: "Maraudeur", games: 6, avgPlacement: 3 }, { trait: "Rédempteur", games: 6, avgPlacement: 2.5 },
-      { trait: "Astro-groove", games: 6, avgPlacement: 4.33 }
+    "heroArt": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Maokai_0.jpg",
+    "rankEmblem": "https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblem/emblem-gold.png",
+    "set": "Set 17",
+    "ladderRank": 582412,
+    "ladderPercentile": 66,
+    "ranked": {
+      "tier": "Gold 3",
+      "lp": 18,
+      "wins": 21,
+      "losses": 12,
+      "top4Rate": 60,
+      "avgPlacement": 3.95,
+      "games": 20
+    },
+    "hyperRoll": {
+      "tier": "Bronze I",
+      "lp": 87
+    },
+    "placementDistribution": [
+      1,
+      6,
+      1,
+      4,
+      5,
+      1,
+      0,
+      2
     ],
-    topChampions: [
-      { champion: "Maokai", cost: 3, games: 12, avgPlacement: 3.5 }, { champion: "Rek'Sai", cost: 1, games: 7, avgPlacement: 4.43 },
-      { champion: "Akali", cost: 2, games: 6, avgPlacement: 3.67 }, { champion: "Rhaast", cost: 3, games: 6, avgPlacement: 2.5 },
-      { champion: "Bel'Veth", cost: 2, games: 6, avgPlacement: 3.83 }
+    "topTraits": [
+      {
+        "trait": "Bagarreur",
+        "games": 11,
+        "avgPlacement": 3.27
+      },
+      {
+        "trait": "N.O.V.A.",
+        "games": 8,
+        "avgPlacement": 3.25
+      },
+      {
+        "trait": "Maraudeur",
+        "games": 6,
+        "avgPlacement": 3
+      },
+      {
+        "trait": "Rédempteur",
+        "games": 6,
+        "avgPlacement": 2.5
+      },
+      {
+        "trait": "Astro-groove",
+        "games": 6,
+        "avgPlacement": 4.33
+      }
     ],
-    highlights: [
-      { emoji: "🐘", title: "Maokai — 12 parties", text: "Unité la plus jouée (3,5 place moy.)" },
-      { emoji: "🌳", title: "Rhaast — 2,5 place moy.", text: "Meilleure moyenne de placement (6 parties)" },
-      { emoji: "🥊", title: "Bagarreur — 11 parties", text: "Synergie la plus jouée (3,27 place moy.)" },
-      { emoji: "🏆", title: "1 victoire (#1)", text: "Sur 20 parties classées cette saison" }
+    "topChampions": [
+      {
+        "champion": "Maokai",
+        "cost": 3,
+        "games": 12,
+        "avgPlacement": 3.5
+      },
+      {
+        "champion": "Rek'Sai",
+        "cost": 1,
+        "games": 7,
+        "avgPlacement": 4.43
+      },
+      {
+        "champion": "Akali",
+        "cost": 2,
+        "games": 6,
+        "avgPlacement": 3.67
+      },
+      {
+        "champion": "Rhaast",
+        "cost": 3,
+        "games": 6,
+        "avgPlacement": 2.5
+      },
+      {
+        "champion": "Bel'Veth",
+        "cost": 2,
+        "games": 6,
+        "avgPlacement": 3.83
+      }
+    ],
+    "highlights": [
+      {
+        "emoji": "🐘",
+        "title": "Maokai — 12 parties",
+        "text": "Unité la plus jouée (3,5 place moy.)"
+      },
+      {
+        "emoji": "🌳",
+        "title": "Rhaast — 2,5 place moy.",
+        "text": "Meilleure moyenne de placement (6 parties)"
+      },
+      {
+        "emoji": "🥊",
+        "title": "Bagarreur — 11 parties",
+        "text": "Synergie la plus jouée (3,27 place moy.)"
+      },
+      {
+        "emoji": "🏆",
+        "title": "1 victoire (#1)",
+        "text": "Sur 20 parties classées cette saison"
+      }
     ]
   },
 
@@ -160,7 +579,7 @@ window.DASH_DATA = {
     "signature": "come furina",
     "adventureRank": 56,
     "worldLevel": 8,
-    "achievements": 555,
+    "achievements": 601,
     "spiralAbyss": "8-3",
     "stygianOnslaught": "107s",
     "heroArt": "https://enka.network/ui/UI_Gacha_AvatarImg_Varesa.png",
@@ -179,19 +598,16 @@ window.DASH_DATA = {
         },
         "set": "Serment de la longue nuit (4)",
         "stats": {
-          "hp": 18415,
-          "atk": 1656,
+          "hp": 19478,
+          "atk": 2079,
           "def": 968,
-          "elementalMastery": 93,
-          "critRate": 61.1,
-          "critDmg": 244.2,
+          "elementalMastery": 56,
+          "critRate": 61.9,
+          "critDmg": 243.5,
           "energyRecharge": 125.3,
-          "bonusDmg": {
-            "label": "Bonus DGT Électro",
-            "value": 46.6
-          }
+          "bonusDmg": null
         },
-        "critValue": 213.1
+        "critValue": 213.7
       },
       {
         "name": "Furina",
@@ -206,19 +622,16 @@ window.DASH_DATA = {
         },
         "set": "Troupe dorée (4)",
         "stats": {
-          "hp": 24788,
-          "atk": 1269,
+          "hp": 31683,
+          "atk": 1347,
           "def": 696,
-          "elementalMastery": 63,
-          "critRate": 70.1,
-          "critDmg": 247.8,
-          "energyRecharge": 179,
-          "bonusDmg": {
-            "label": "Bonus DGT Hydro",
-            "value": 46.6
-          }
+          "elementalMastery": 40,
+          "critRate": 67.8,
+          "critDmg": 259.5,
+          "energyRecharge": 173.8,
+          "bonusDmg": null
         },
-        "critValue": 201.2
+        "critValue": 208.3
       },
       {
         "name": "Chasca",
@@ -234,18 +647,15 @@ window.DASH_DATA = {
         "set": "Chasseur de la Maréchaussée (4)",
         "stats": {
           "hp": 15742,
-          "atk": 2036,
-          "def": 646,
-          "elementalMastery": 47,
+          "atk": 2458,
+          "def": 736,
+          "elementalMastery": 61,
           "critRate": 82.4,
-          "critDmg": 180.4,
-          "energyRecharge": 109.7,
-          "bonusDmg": {
-            "label": "Bonus DGT Géo",
-            "value": 7
-          }
+          "critDmg": 200.6,
+          "energyRecharge": 104.5,
+          "bonusDmg": null
         },
-        "critValue": 182.6
+        "critValue": 202.8
       },
       {
         "name": "Mona",
@@ -304,17 +714,17 @@ window.DASH_DATA = {
         "portrait": "https://enka.network/ui/UI_AvatarIcon_Kazuha.png",
         "level": "90/90",
         "weapon": {
-          "name": "Piqûre de fer",
-          "rarity": 4,
-          "refine": "R3",
-          "level": "90/90"
+          "name": "Épée émoussée",
+          "rarity": 1,
+          "refine": "R1",
+          "level": "1/90"
         },
         "set": "Ombre de la Verte Chasseuse (4)",
         "stats": {
           "hp": 21812,
-          "atk": 1591,
+          "atk": 855,
           "def": 983,
-          "elementalMastery": 654,
+          "elementalMastery": 488,
           "critRate": 24.8,
           "critDmg": 116.1,
           "energyRecharge": 138.2,
@@ -324,30 +734,6 @@ window.DASH_DATA = {
           }
         },
         "critValue": 105.7
-      },
-      {
-        "name": "Bennett",
-        "element": "Pyro",
-        "portrait": "https://enka.network/ui/UI_AvatarIcon_Bennett.png",
-        "level": "90/90",
-        "weapon": {
-          "name": "Épée de Favonius",
-          "rarity": 4,
-          "refine": "R1",
-          "level": "50/50"
-        },
-        "set": "Ancien rituel royal (4)",
-        "stats": {
-          "hp": 27335,
-          "atk": 1126,
-          "def": 933,
-          "elementalMastery": 16,
-          "critRate": 21.3,
-          "critDmg": 97.4,
-          "energyRecharge": 186.5,
-          "bonusDmg": null
-        },
-        "critValue": 80
       },
       {
         "name": "Xingqiu",
@@ -377,25 +763,49 @@ window.DASH_DATA = {
         "critValue": 45.7
       },
       {
+        "name": "Bennett",
+        "element": "Pyro",
+        "portrait": "https://enka.network/ui/UI_AvatarIcon_Bennett.png",
+        "level": "90/90",
+        "weapon": {
+          "name": "Épée de Favonius",
+          "rarity": 4,
+          "refine": "R1",
+          "level": "50/50"
+        },
+        "set": "Ancien rituel royal (3)",
+        "stats": {
+          "hp": 22555,
+          "atk": 1101,
+          "def": 933,
+          "elementalMastery": 0,
+          "critRate": 11.2,
+          "critDmg": 77.2,
+          "energyRecharge": 186.5,
+          "bonusDmg": null
+        },
+        "critValue": 39.6
+      },
+      {
         "name": "Iansan",
         "element": "Électro",
         "portrait": "https://enka.network/ui/UI_AvatarIcon_Iansan.png",
         "level": "60/60",
         "weapon": {
-          "name": "Lance de Favonius",
-          "rarity": 4,
-          "refine": "R5",
-          "level": "80/80"
+          "name": "Lance du débutant",
+          "rarity": 1,
+          "refine": "R1",
+          "level": "1/90"
         },
         "set": "Rideau du Gladiateur (1)",
         "stats": {
           "hp": 7738,
-          "atk": 785,
+          "atk": 227,
           "def": 490,
           "elementalMastery": 37,
           "critRate": 16.7,
           "critDmg": 56.2,
-          "energyRecharge": 142.2,
+          "energyRecharge": 114.3,
           "bonusDmg": null
         },
         "critValue": 29.6
@@ -476,8 +886,8 @@ window.DASH_DATA = {
     "highlights": [
       {
         "emoji": "💎",
-        "title": "Varesa — 213.1 CV",
-        "text": "Meilleure Crit Value du roster (61.1% crit · 244.2% dgt crit)"
+        "title": "Varesa — 213.7 CV",
+        "text": "Meilleure Crit Value du roster (61.9% crit · 243.5% dgt crit)"
       },
       {
         "emoji": "🗂️",
@@ -530,9 +940,9 @@ window.DASH_DATA = {
         "portrait": "https://wuwa.build/assets/UIResources/Common/Image/IconRoleHeadCircle256/T_IconRoleHeadCircle256_57_UI.webp",
         "sequence": "S0",
         "board": "Hypercarry",
-        "boardPct": 84.4,
-        "rank": 836,
-        "rankTotal": 991,
+        "boardPct": 84.3,
+        "rank": 918,
+        "rankTotal": 1089,
         "weapon": {
           "name": "Lame lustrée",
           "refine": "R1",
@@ -548,9 +958,9 @@ window.DASH_DATA = {
         "portrait": "https://wuwa.build/assets/UIResources/Common/Image/IconRoleHeadCircle256/T_IconRoleHeadCircle256_40_UI.webp",
         "sequence": "S0",
         "board": "Solo",
-        "boardPct": 80.2,
-        "rank": 2081,
-        "rankTotal": 2594,
+        "boardPct": 80.3,
+        "rank": 2192,
+        "rankTotal": 2731,
         "weapon": {
           "name": "Épine de l'insoumise",
           "refine": "R1",

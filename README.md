@@ -56,28 +56,37 @@ Sources actuellement automatisées, sans aucune action de ta part :
   dépendre d'Akasha, qui bloque les accès automatisés.
 - **Wuthering Waves** — via `api.wuwa.build`, l'API JSON publique derrière
   WuWaBuilds (aucune protection anti-bot, tout est en clair).
+- **League of Legends / TFT** — via l'API officielle Riot Games (niveau,
+  rang, LP, victoires/défaites Solo/Duo, Flex et TFT classé). Le compte
+  Riot réel utilisé pour l'appel API vit dans `player.riotAccount` dans
+  `data.js` (séparé du pseudo affiché "alnrfLO", qui est juste l'identité du
+  site). Le reste (champions joués, maîtrise, matchups, faits marquants)
+  reste une photo manuelle — Riot ne donne ça qu'via l'API Match-V5, bien
+  plus lourde à mettre en œuvre.
 
-Sources **pas encore automatisées** :
-- **League of Legends / TFT** — op.gg bloque le scraping. La seule voie
-  fiable est l'API officielle Riot Games (gratuite). Une fois que tu as une
-  clé (voir ci-dessous), redemande-moi de la brancher dans le script.
+  ⚠️ La clé Riot utilisée est une **clé "Development"**, gratuite mais
+  valable seulement **24h**. Si elle expire, le rafraîchissement Genshin/Wuwa
+  continue de fonctionner normalement (chaque source est indépendante) et
+  seul LoL/TFT est sauté ce jour-là, avec un message d'erreur clair dans les
+  logs du run GitHub Actions. Pour la renouveler : régénère une clé sur
+  [developer.riotgames.com](https://developer.riotgames.com/), puis va dans
+  **Settings → Secrets and variables → Actions** du repo → `RIOT_API_KEY` →
+  *Update* (jamais besoin de me la redonner en conversation).
+
+Source **pas automatisable** :
 - **Valorant** — Riot ne donne pas accès à son API de stats/matchs Valorant
   aux clés de développeur personnelles (accès réservé aux partenaires
-  esport) ; ça restera manuel pour l'instant.
+  esport) ; ça reste manuel.
 
-Pour ajouter LoL/TFT à l'auto-refresh :
-1. Va sur [developer.riotgames.com](https://developer.riotgames.com/), connecte-toi avec ton compte Riot.
-2. Génère une clé "Development API Key" (gratuite, valable 24h — il faudra la régénérer à chaque expiration tant que tu n'as pas de clé personnelle/production).
-3. Dans le repo GitHub → **Settings → Secrets and variables → Actions → New repository secret**, crée un secret nommé `RIOT_API_KEY` avec cette valeur (ne me la donne jamais directement dans la conversation).
-4. Reviens me voir : je branche le script pour qu'il l'utilise.
-
-Tu peux aussi lancer le script toi-même en local à tout moment :
+Tu peux lancer le script toi-même en local à tout moment :
 ```
-node scripts/refresh-data.mjs
+node scripts/refresh-data.mjs                                    # Genshin + Wuwa uniquement
+RIOT_API_KEY=ta-clé node scripts/refresh-data.mjs                # + LoL/TFT
 ```
 
-Sinon, pour rafraîchir manuellement une source non automatisée, redemande à
-Claude dans la conversation : *"rafraîchis mon dashboard"*.
+Pour rafraîchir manuellement Valorant (ou n'importe quelle stat que le
+script ne couvre pas), redemande à Claude dans la conversation :
+*"rafraîchis mon dashboard"*.
 
 ## Fonctionnalités
 
@@ -100,7 +109,7 @@ Toutes les images externes viennent de CDN publics déjà utilisés par op.gg / 
 
 ## Limites connues
 
-- **Valorant** : op.gg ne fournit pas l'historique de partie complet par scraping — seules les stats agrégées et la dernière partie sont disponibles. Pas d'auto-refresh possible (voir plus haut).
-- **LoL / TFT** : mis à jour à la main pour l'instant — auto-refresh prêt à être branché dès qu'une clé API Riot est disponible (voir plus haut).
+- **Valorant** : op.gg ne fournit pas l'historique de partie complet par scraping, et Riot ne donne pas d'accès API perso pour Valorant — reste manuel (dernier match + agrégat des 20 derniers).
+- **LoL / TFT** : rang/niveau/LP auto-actualisés quotidiennement ; champions joués, maîtrise et matchups restent une photo manuelle (nécessiterait l'API Match-V5).
 - **HSR** : toujours mis à jour à la main (vitrine Enka single-personnage) — pas encore migré vers le même système multi-personnages que Genshin.
-- **Genshin / Wuthering Waves** : entièrement automatiques, voir la section rafraîchissement automatique ci-dessus.
+- **Genshin / Wuthering Waves** : entièrement automatiques (roster complet + stats), voir la section rafraîchissement automatique ci-dessus.

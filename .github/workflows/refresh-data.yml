@@ -18,9 +18,10 @@ jobs:
         with:
           node-version: 22
 
-      - name: Refresh data.js from Enka.network + WuwaBuilds
+      - name: Refresh data.js from Enka.network, WuwaBuilds and the Riot API
         run: node scripts/refresh-data.mjs
-        # RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}  — uncomment once LoL/TFT auto-refresh is wired up
+        env:
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
 
       - name: Commit and push if data changed
         run: |

@@ -6,9 +6,11 @@
        same formula Akasha.cv uses — so we don't depend on Akasha,
        which blocks automated access).
      - wuwa:    api.wuwa.build (public JSON API, no auth needed).
-   lol / tft / valorant are NOT touched (op.gg blocks scraping;
-   wiring those up needs a Riot Games API key — see README).
+     - lol/tft: official Riot Games API — only runs if RIOT_API_KEY is
+       set (see README for how to get one). Valorant has no public
+       Riot API access for personal keys, so it stays manual.
    Run: node scripts/refresh-data.mjs
+   Run with Riot refresh: RIOT_API_KEY=... node scripts/refresh-data.mjs
    ============================================================ */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -224,6 +226,54 @@ async function fetchWuwa() {
   };
 }
 
+/* ============================== LEAGUE OF LEGENDS / TFT (Riot API) ============================== */
+
+async function riotGet(url) {
+  const res = await fetch(url, { headers: { 'X-Riot-Token': process.env.RIOT_API_KEY } });
+  if (!res.ok) throw new Error(`Riot API ${url} -> HTTP ${res.status}`);
+  return res.json();
+}
+const ROMAN = { I: 1, II: 2, III: 3, IV: 4 };
+function tierLabel(tier, rank) {
+  const word = tier.charAt(0) + tier.slice(1).toLowerCase();
+  return rank ? `${word} ${ROMAN[rank] ?? rank}` : word;
+}
+const rankEmblemUrl = (tier) => `https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblem/emblem-${tier.toLowerCase()}.png`;
+const profileIconUrl = (id) => `https://opgg-static.akamaized.net/meta/images/profile_icons/profileIcon${id}.jpg?image=q_auto:good,f_png,w_200`;
+const winrate = (w, l) => (w + l ? Math.round((w / (w + l)) * 100) : 0);
+
+// Only patches rank/level/profile-icon fields — champion mastery, match
+// history and highlights need Match-V5 (a lot more calls/complexity) and
+// stay as the last manually-refreshed snapshot for now.
+async function fetchRiot({ gameName, tagLine, platform }) {
+  const acct = await riotGet(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`);
+  const [summoner, entries, tftEntries] = await Promise.all([
+    riotGet(`https://${platform}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${acct.puuid}`),
+    riotGet(`https://${platform}.api.riotgames.com/lol/league/v4/entries/by-puuid/${acct.puuid}`),
+    riotGet(`https://${platform}.api.riotgames.com/tft/league/v1/by-puuid/${acct.puuid}`),
+  ]);
+  const solo = entries.find((e) => e.queueType === 'RANKED_SOLO_5x5');
+  const flex = entries.find((e) => e.queueType === 'RANKED_FLEX_SR');
+  const tft = tftEntries.find((e) => e.queueType === 'RANKED_TFT');
+
+  const lolPatch = { summonerLevel: summoner.summonerLevel, profileIcon: profileIconUrl(summoner.profileIconId) };
+  if (solo) {
+    lolPatch.rankEmblem = rankEmblemUrl(solo.tier);
+    lolPatch.queues = { soloDuo: { tier: tierLabel(solo.tier, solo.rank), lp: solo.leaguePoints, wins: solo.wins, losses: solo.losses, winrate: winrate(solo.wins, solo.losses) } };
+  }
+  if (flex) {
+    lolPatch.queues = { ...lolPatch.queues, flex: { tier: tierLabel(flex.tier, flex.rank), lp: flex.leaguePoints, wins: flex.wins, losses: flex.losses, winrate: winrate(flex.wins, flex.losses) } };
+  }
+
+  const tftPatch = {};
+  if (tft) {
+    tftPatch.rankEmblem = rankEmblemUrl(tft.tier);
+    tftPatch.ranked = { tier: tierLabel(tft.tier, tft.rank), lp: tft.leaguePoints, wins: tft.wins, losses: tft.losses };
+  }
+
+  return { lolPatch, tftPatch };
+}
+
 /* ============================== data.js surgery ============================== */
 
 // Finds `  <key>: {` at the top level and returns the [start, end) character
@@ -261,21 +311,70 @@ function replaceBlock(text, key, value) {
   return text.slice(0, start) + serialized + text.slice(end);
 }
 
+// Reads a top-level block back into a real JS value (safe: this only ever
+// runs against our own data.js, never untrusted input).
+function readBlock(text, key) {
+  const [start, end] = findBlock(text, key);
+  return new Function(`return (${text.slice(start, end)})`)();
+}
+
+function deepMerge(target, patch) {
+  for (const [k, v] of Object.entries(patch)) {
+    if (v && typeof v === 'object' && !Array.isArray(v) && target[k] && typeof target[k] === 'object') deepMerge(target[k], v);
+    else target[k] = v;
+  }
+  return target;
+}
+
+// Unlike replaceBlock, this only overwrites the fields present in `patch`,
+// preserving everything else already in the block (e.g. lol.champions,
+// tft.topTraits — data Riot's simple rank endpoints don't provide).
+function mergeBlock(text, key, patch) {
+  const current = readBlock(text, key);
+  deepMerge(current, patch);
+  return replaceBlock(text, key, current);
+}
+
 async function main() {
   let text = fs.readFileSync(DATA_JS, 'utf8');
+  let hadError = false;
 
-  console.log('Fetching Genshin (Enka.network)...');
-  const genshin = await fetchGenshin();
-  text = replaceBlock(text, 'genshin', genshin);
-  console.log(`  -> ${genshin.characters.length} characters, best CV: ${genshin.characters[0].name} (${genshin.characters[0].critValue})`);
+  // Each source is independent: if one fails (a flaky API, an expired Riot
+  // dev key that needs manual renewal every 24h, ...) the others still get
+  // written instead of the whole run being thrown away.
+  try {
+    console.log('Fetching Genshin (Enka.network)...');
+    const genshin = await fetchGenshin();
+    text = replaceBlock(text, 'genshin', genshin);
+    console.log(`  -> ${genshin.characters.length} characters, best CV: ${genshin.characters[0].name} (${genshin.characters[0].critValue})`);
+  } catch (err) { hadError = true; console.error('Genshin refresh failed:', err.message); }
 
-  console.log('Fetching Wuthering Waves (api.wuwa.build)...');
-  const wuwa = await fetchWuwa();
-  text = replaceBlock(text, 'wuwa', wuwa);
-  console.log(`  -> ${wuwa.characters.length} builds, ${wuwa.echoes.length} echoes`);
+  try {
+    console.log('Fetching Wuthering Waves (api.wuwa.build)...');
+    const wuwa = await fetchWuwa();
+    text = replaceBlock(text, 'wuwa', wuwa);
+    console.log(`  -> ${wuwa.characters.length} builds, ${wuwa.echoes.length} echoes`);
+  } catch (err) { hadError = true; console.error('Wuthering Waves refresh failed:', err.message); }
+
+  if (process.env.RIOT_API_KEY) {
+    try {
+      console.log('Fetching LoL/TFT (Riot API)...');
+      const riotAccount = readBlock(text, 'riotAccount');
+      const { lolPatch, tftPatch } = await fetchRiot(riotAccount);
+      text = mergeBlock(text, 'lol', lolPatch);
+      text = mergeBlock(text, 'tft', tftPatch);
+      console.log(`  -> LoL ${lolPatch.queues?.soloDuo?.tier ?? '?'} · TFT ${tftPatch.ranked?.tier ?? '?'}`);
+    } catch (err) {
+      hadError = true;
+      console.error('Riot API refresh failed (dev keys expire every 24h — regenerate at developer.riotgames.com and update the RIOT_API_KEY secret):', err.message);
+    }
+  } else {
+    console.log('RIOT_API_KEY not set — skipping LoL/TFT refresh.');
+  }
 
   fs.writeFileSync(DATA_JS, text);
   console.log('data.js updated.');
+  if (hadError) process.exit(1); // non-zero so the Action run shows as failed, but data.js still has whatever succeeded
 }
 
 main().catch((err) => { console.error(err); process.exit(1); });
