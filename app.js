@@ -302,7 +302,7 @@
         </div>
       </div>
       <div class="side-card">${sectionLabel('Faits marquants')}${highlightGrid(g.highlights)}</div>
-      <div class="side-card">${sectionLabel('Mode Hyper Roll')}${chipRow([{ text: `${g.hyperRoll.tier} · ${g.hyperRoll.lp} LP` }])}</div>
+      <div class="side-card">${sectionLabel('Autres modes classés')}${chipRow([{ text: `${g.hyperRoll.tier} · ${g.hyperRoll.lp} LP`, small: 'Hyper Roll' }, { text: `${g.doubleUp.tier} · ${g.doubleUp.lp} LP`, small: `Double Up · ${g.doubleUp.wins}V ${g.doubleUp.losses}D` }])}</div>
     `;
     const main = `
       ${sectionLabel('Répartition des places')}

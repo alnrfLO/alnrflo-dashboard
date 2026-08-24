@@ -255,6 +255,7 @@ async function fetchRiot({ gameName, tagLine, platform }) {
   const solo = entries.find((e) => e.queueType === 'RANKED_SOLO_5x5');
   const flex = entries.find((e) => e.queueType === 'RANKED_FLEX_SR');
   const tft = tftEntries.find((e) => e.queueType === 'RANKED_TFT');
+  const doubleUp = tftEntries.find((e) => e.queueType === 'RANKED_TFT_DOUBLE_UP');
 
   const lolPatch = { summonerLevel: summoner.summonerLevel, profileIcon: profileIconUrl(summoner.profileIconId) };
   if (solo) {
@@ -269,6 +270,9 @@ async function fetchRiot({ gameName, tagLine, platform }) {
   if (tft) {
     tftPatch.rankEmblem = rankEmblemUrl(tft.tier);
     tftPatch.ranked = { tier: tierLabel(tft.tier, tft.rank), lp: tft.leaguePoints, wins: tft.wins, losses: tft.losses };
+  }
+  if (doubleUp) {
+    tftPatch.doubleUp = { tier: tierLabel(doubleUp.tier, doubleUp.rank), lp: doubleUp.leaguePoints, wins: doubleUp.wins, losses: doubleUp.losses };
   }
 
   return { lolPatch, tftPatch };

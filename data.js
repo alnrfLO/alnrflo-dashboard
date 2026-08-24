@@ -480,6 +480,12 @@ window.DASH_DATA = {
       "tier": "Bronze I",
       "lp": 87
     },
+    "doubleUp": {
+      "tier": "Silver 2",
+      "lp": 40,
+      "wins": 11,
+      "losses": 5
+    },
     "placementDistribution": [
       1,
       6,
@@ -907,7 +913,7 @@ window.DASH_DATA = {
     uid: "721212389",
     nickname: "Emma",
     signature: "« idk »",
-    trailblazeLevel: 70, equilibriumLevel: 6, achievements: 588, simulatedUniverse: 9,
+    trailblazeLevel: 70, equilibriumLevel: 6, achievements: 589, simulatedUniverse: 9,
     heroArt: "https://enka.network/ui/hsr/SpriteOutput/AvatarDrawCard/1407.png",
     profileIcon: "https://enka.network/ui/hsr/SpriteOutput/AvatarRoundIcon/AvatarSkin/1140701.png",
     showcase: {
@@ -921,7 +927,7 @@ window.DASH_DATA = {
       { emoji: "🌌", title: "Castorice · Quantique", text: "Éidolon 6 — Niv. 80/80" },
       { emoji: "💎", title: "64,5% crit · 203,2% dgt crit", text: "Ratio critique de la vitrine" },
       { emoji: "🌠", title: "Univers Simulé 9", text: "Palier le plus avancé nettoyé" },
-      { emoji: "🏅", title: "588 hauts faits", text: "Débloqués sur le compte" }
+      { emoji: "🏅", title: "589 hauts faits", text: "Débloqués sur le compte" }
     ],
     note: "Seul le personnage mis en avant dans ta vitrine Enka est visible publiquement. Active le partage complet en jeu et redemande-moi une mise à jour pour afficher tout ton roster."
   },
@@ -1052,7 +1058,7 @@ window.DASH_DATA = {
     realmsTracked: 6,
     bestRate: { value: 60, label: "Top 4 · TFT" },
     trackedPlaytime: { value: 20.7, label: "Valorant" },
-    achievements: 555 + 588,
+    achievements: 555 + 589,
     highlights: [
       { emoji: "⚔️", title: "Yasuo — 375 231 pts", text: "Champion le plus maîtrisé (LoL)" },
       { emoji: "🛡️", title: "Sentinelle — 100% WR", text: "Meilleur rôle (Valorant · 5V 0D)" },
