@@ -40,15 +40,16 @@ JS organisé par jeu (`lol`, `valorant`, `tft`, `genshin`, `hsr`, `wuwa`) plus
 la liste des jeux affichés dans la sidebar (`games`). Modifier ce fichier
 suffit à mettre à jour toutes les pages, aucune duplication de chiffres.
 
-### Rafraîchissement automatique
+### Rafraîchissement en un clic
 
-Un [GitHub Action](.github/workflows/refresh-data.yml) tourne **chaque jour à
-6h UTC** (et peut être lancé à la main depuis l'onglet *Actions* du repo → 
-*Refresh dashboard data* → *Run workflow*). Il exécute `scripts/refresh-data.mjs`,
-qui va chercher les vraies données publiques et régénère `data.js` tout seul,
-puis commit/push le résultat si quelque chose a changé.
+Un [GitHub Action](.github/workflows/refresh-data.yml) se déclenche **à la
+demande, depuis l'onglet *Actions* du repo** → *Refresh dashboard data* →
+bouton **Run workflow** (pas de planning automatique — rien ne tourne tant
+que tu n'as pas cliqué). Il exécute `scripts/refresh-data.mjs`, qui va
+chercher les vraies données publiques et régénère `data.js` tout seul, puis
+commit/push le résultat si quelque chose a changé.
 
-Sources actuellement automatisées, sans aucune action de ta part :
+Sources couvertes par ce bouton :
 - **Genshin Impact** — via l'API publique d'[Enka.network](https://enka.network) :
   tout ton roster de personnages showcasé (pas juste la vitrine mise en avant),
   avec une Crit Value calculée nous-mêmes (2×Taux Crit + DGT Crit, uniquement

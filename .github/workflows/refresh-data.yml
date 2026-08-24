@@ -1,9 +1,7 @@
 name: Refresh dashboard data
 
 on:
-  schedule:
-    - cron: '0 6 * * *'   # daily at 06:00 UTC
-  workflow_dispatch: {}    # lets you trigger it manually from the Actions tab
+  workflow_dispatch: {}    # manual only — trigger from the repo's Actions tab: "Refresh dashboard data" → "Run workflow"
 
 permissions:
   contents: write
