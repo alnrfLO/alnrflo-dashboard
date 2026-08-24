@@ -56,7 +56,10 @@
     return geometry;
   }
 
-  function makeIsland(colorHex, seed) {
+  const textureLoader = new THREE.TextureLoader();
+  textureLoader.crossOrigin = 'anonymous';
+
+  function makeIsland(colorHex, seed, avatarUrl) {
     const g = new THREE.Group();
 
     // rocky, irregular underside
@@ -73,14 +76,30 @@
     top.position.y = 0.24;
     g.add(top);
 
-    // small glowing crystal landmark, one per game, spins independently
-    const crystal = new THREE.Mesh(
-      new THREE.OctahedronGeometry(0.26, 0),
-      new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.2, metalness: 0.2, emissive: colorHex, emissiveIntensity: 0.35, flatShading: true })
+    // floating medallion with the game's own artwork — kept facing the
+    // camera at all times (see the animate loop), like a signpost
+    const bannerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, side: THREE.DoubleSide });
+    const banner = new THREE.Mesh(new THREE.CircleGeometry(0.34, 28), bannerMat);
+    banner.position.y = 1.05;
+    g.add(banner);
+    g.userData.banner = banner;
+
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(0.36, 0.035, 8, 28),
+      new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.35, metalness: 0.3, flatShading: true })
     );
-    crystal.position.y = 0.95;
-    g.add(crystal);
-    g.userData.crystal = crystal;
+    ring.position.y = 1.05;
+    g.add(ring);
+    g.userData.ring = ring;
+
+    if (avatarUrl) {
+      textureLoader.load(
+        avatarUrl,
+        (tex) => { tex.colorSpace = THREE.SRGBColorSpace; bannerMat.map = tex; bannerMat.needsUpdate = true; },
+        undefined,
+        () => { /* CORS-blocked or failed to load — keep the plain ring, no crash */ }
+      );
+    }
 
     return g;
   }
@@ -111,6 +130,7 @@
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
     renderer.setSize(w, h);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.8));
     const dir = new THREE.DirectionalLight(0xffffff, 0.85);
@@ -122,7 +142,7 @@
     const count = games.length;
     meshes = games.map((game, i) => {
       const color = cssColor(game.colorVar, game.fallback);
-      const island = makeIsland(new THREE.Color(color), i * 137 + 41);
+      const island = makeIsland(new THREE.Color(color), i * 137 + 41, game.avatar);
       const angle = angleFor(i, count);
       island.position.set(Math.sin(angle) * radius, 0, Math.cos(angle) * radius);
       island.userData.gameId = game.id;
@@ -170,8 +190,11 @@
         isl.scale.setScalar(s);
         if (!reduceMotion) {
           isl.position.y = Math.sin(t * 1.2 + isl.userData.phase) * 0.1;
-          if (isl.userData.crystal) isl.userData.crystal.rotation.y = t * 0.8;
         }
+        // counter-rotate so the medallion always faces the camera, whatever
+        // angle the whole circle is currently rotated to
+        if (isl.userData.banner) isl.userData.banner.rotation.y = -group.rotation.y;
+        if (isl.userData.ring) isl.userData.ring.rotation.y = -group.rotation.y;
       });
       renderer.render(scene, camera);
     }

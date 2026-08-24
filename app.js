@@ -211,32 +211,16 @@
         </div>
         <div class="island-preview" id="islandPreview">${islandPreviewHtml(stats[0])}</div>
       </div>
-
-      <div class="divider"><div class="line"></div><span class="mark">✦</span><div class="line"></div></div>
-
-      <div class="realm-label">Résumé par royaume</div>
-      <div class="realm-summary">
-        ${stats.map(g => realmSummary(g.id, g.avatar, g.name, g.badgeClass, g.badgeText, g.stats)).join('')}
-      </div>
-
-      <footer>« Chaque royaume garde ses propres légendes — reviens avec tes sceaux, et le codex s'écrira. »</footer>
     `;
     const preview = document.getElementById('islandPreview');
     document.getElementById('islandPrev').addEventListener('click', () => window.islandSceneGo && window.islandSceneGo(-1));
     document.getElementById('islandNext').addEventListener('click', () => window.islandSceneGo && window.islandSceneGo(1));
     if (window.initIslandScene) {
       requestAnimationFrame(() => window.initIslandScene(
-        D.games.map(g => ({ id: g.id, ...GAME_COLOR[g.id] })),
+        D.games.map(g => ({ id: g.id, avatar: g.avatar, ...GAME_COLOR[g.id] })),
         { onFocusChange: (index) => { preview.innerHTML = islandPreviewHtml(stats[index]); } }
       ));
     }
-  }
-
-  function realmSummary(id, avatar, name, badgeClass, badgeText, stats) {
-    return `<a href="#/${id}" class="realm-summary-item">
-      <div class="realm-summary-title">${avatar ? `<img src="${avatar}" alt=""/>` : ''}${esc(name)}<span class="badge ${badgeClass} realm-summary-badge">${esc(badgeText)}</span></div>
-      ${fullStats(stats)}
-    </a>`;
   }
 
   /* ============================================================ LOL */
