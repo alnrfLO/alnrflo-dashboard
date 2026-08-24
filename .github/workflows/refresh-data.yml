@@ -1,0 +1,35 @@
+name: Refresh dashboard data
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # daily at 06:00 UTC
+  workflow_dispatch: {}    # lets you trigger it manually from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Refresh data.js from Enka.network + WuwaBuilds
+        run: node scripts/refresh-data.mjs
+        # RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}  — uncomment once LoL/TFT auto-refresh is wired up
+
+      - name: Commit and push if data changed
+        run: |
+          if git diff --quiet -- data.js; then
+            echo "No changes — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data.js
+          git commit -m "chore: auto-refresh dashboard data"
+          git push

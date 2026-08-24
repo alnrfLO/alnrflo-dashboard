@@ -76,7 +76,7 @@
   function echoTable(rows) {
     return `<div class="champ-table-wrap"><table class="champ-full-table">
       <tr><th>Écho</th><th>Set</th><th>Stat principale</th><th>Crit Value</th></tr>
-      ${rows.map(e => `<tr><td class="champ-name-cell"><img src="${e.icon}" alt=""/>${esc(e.name)}</td><td>${esc(e.set)}</td><td>${esc(e.mainStat)}</td><td>${e.cv > 0 ? `${fmt1(e.cv)} CV · ${e.rv}% RV` : '—'}</td></tr>`).join('')}
+      ${rows.map(e => `<tr><td class="champ-name-cell"><img src="${e.icon}" alt=""/>${esc(e.name)}</td><td>${esc(e.set)}</td><td>${esc(e.mainStat)}</td><td>${e.cv > 0 ? `${fmt1(e.cv)} CV` : '—'}</td></tr>`).join('')}
     </table></div>`;
   }
   function genshinCharBlock(c) {
@@ -130,6 +130,7 @@
   /* ============================================================ HOME */
   function renderHome() {
     const bestGenshin = D.genshin.characters.reduce((a, c) => (c.critValue > a.critValue ? c : a));
+    const wuwaByBoard = [...D.wuwa.characters].sort((a, b) => b.boardPct - a.boardPct);
     $content.innerHTML = `
       <div class="divider"><div class="line"></div><span class="mark">✦</span><div class="line"></div></div>
 
@@ -159,7 +160,7 @@
           ['Meilleure unité', `${D.tft.topChampions[3].champion} · #${D.tft.topChampions[3].avgPlacement}`],
           ['Top synergie', D.tft.topTraits[0].trait]
         ])}
-        ${realmSummary('genshin', D.genshin.profileIcon, 'Genshin Impact', 'badge-teal', 'akasha.cv', [
+        ${realmSummary('genshin', D.genshin.profileIcon, 'Genshin Impact', 'badge-teal', 'enka.network', [
           ['Rang Aventure', 'AR ' + D.genshin.adventureRank],
           ['Niveau Monde', 'WL ' + D.genshin.worldLevel],
           ['Abîme Spiralé', D.genshin.spiralAbyss],
@@ -175,10 +176,10 @@
           ['Vitrine', `${D.hsr.showcase.name} · Éidolon ${D.hsr.showcase.eidolon}`],
           ['Crit / Crit DMG', `${D.hsr.showcase.stats.critRate}% / ${D.hsr.showcase.stats.critDmg}%`]
         ])}
-        ${realmSummary('wuwa', D.wuwa.characters[1].portrait, 'Wuthering Waves', 'badge-cyan', 'wuwa.build', [
+        ${realmSummary('wuwa', wuwaByBoard[0].portrait, 'Wuthering Waves', 'badge-cyan', 'wuwa.build', [
           ['Résonateurs', D.wuwa.characters.map(c => c.name).join(' · ')],
-          ['Meilleur board', `${D.wuwa.characters[1].name} · ${D.wuwa.characters[1].boardPct}%`],
-          ['2e board', `${D.wuwa.characters[0].name} · ${D.wuwa.characters[0].boardPct}%`],
+          ['Meilleur board', `${wuwaByBoard[0].name} · ${wuwaByBoard[0].boardPct}%`],
+          ['2e board', `${wuwaByBoard[1] ? `${wuwaByBoard[1].name} · ${wuwaByBoard[1].boardPct}%` : '—'}`],
           ['Échos', D.wuwa.echoesCount],
           ['Meilleur écho', `${D.wuwa.echoes[0].name} · ${fmt1(D.wuwa.echoes[0].cv)} CV`],
           ['Serveur', D.wuwa.server]
@@ -334,7 +335,7 @@
 
   function renderGenshin() {
     const g = D.genshin;
-    const hero = pageHero({ badge: `enka.network · akasha.cv · UID ${g.uid}`, title: 'Genshin Impact', art: g.heroArt, rankImg: g.profileIcon, rankLabel: `AR ${g.adventureRank} · WL ${g.worldLevel}`, rankSub: `Abîme Spiralé ${g.spiralAbyss}` });
+    const hero = pageHero({ badge: `enka.network · UID ${g.uid}`, title: 'Genshin Impact', art: g.heroArt, rankImg: g.profileIcon, rankLabel: `AR ${g.adventureRank} · WL ${g.worldLevel}`, rankSub: `Abîme Spiralé ${g.spiralAbyss}` });
     const side = `
       <div class="side-card">
         <div class="profile-row">
@@ -350,7 +351,7 @@
       <div class="side-card"><div class="note">${esc(g.note)}</div></div>
     `;
     const main = `
-      ${sectionLabel(`Roster — ${g.characters.length} personnages (Akasha.cv)`)}
+      ${sectionLabel(`Roster — ${g.characters.length} personnages (Enka.network)`)}
       ${g.characters.map(genshinCharBlock).join('')}
     `;
     $content.innerHTML = pageShell(hero, side, main);
@@ -407,7 +408,7 @@
           <div class="profile-stat"><div class="profile-num">${g.server}</div><div class="profile-label">Serveur</div></div>
         </div>
       </div>
-      <div class="side-card">${sectionLabel('Faits marquants')}${highlightGrid(g.characters.map(c => ({ title: `${esc(c.name)} — ${c.boardPct}% (${esc(c.board)})`, text: `#${fmtInt(c.rank)} / ${fmtInt(c.rankTotal)} mondial · ${c.critValue} CV` })).concat([{ title: `${esc(g.echoes[0].name)} — ${fmt1(g.echoes[0].cv)} CV`, text: `Meilleur écho (${g.echoes[0].rv}% RV)` }]))}</div>
+      <div class="side-card">${sectionLabel('Faits marquants')}${highlightGrid(g.characters.map(c => ({ title: `${esc(c.name)} — ${c.boardPct}% (${esc(c.board)})`, text: `#${fmtInt(c.rank)} / ${fmtInt(c.rankTotal)} mondial · ${c.critValue} CV` })).concat([{ title: `${esc(g.echoes[0].name)} — ${fmt1(g.echoes[0].cv)} CV`, text: 'Meilleur écho du roster' }]))}</div>
       <div class="side-card">${sectionLabel('Armes')}${chipRow(g.characters.map(c => ({ img: c.weapon.icon, text: `${c.weapon.name} (${c.weapon.refine})`, small: c.name })))}</div>
       <div class="side-card"><div class="note" style="border-top:none; padding-top:0;">Profil <a href="${g.tracker}" target="_blank" rel="noopener">WuWaBuilds</a> — ${esc(g.note)}</div></div>
     `;
