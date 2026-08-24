@@ -7,17 +7,16 @@ framework, aucune dépendance à installer, aucune étape de build.
 ## Structure du projet
 
 ```
-index.html                        → page unique (SPA) : sidebar de navigation + zone de contenu
-style.css                          → tous les styles (thème "Codex", fonts, cartes, mode nuit, sidebar)
-data.js                             → toutes les stats, dans window.DASH_DATA
-app.js                               → routage (hash-based : #/lol, #/valorant, ...) + rendu des pages
-scripts/refresh-data.mjs              → régénère data.js depuis les APIs publiques (voir plus bas)
-.github/workflows/refresh-data.yml     → fait tourner ce script tous les jours automatiquement
+index.html                → page unique (SPA) : sidebar de navigation + zone de contenu
+style.css                  → tous les styles (thème "Codex", fonts, cartes, mode nuit, sidebar)
+data.js                     → toutes les stats, dans window.DASH_DATA
+app.js                       → routage (hash-based : #/lol, #/valorant, ...) + rendu des pages
+scripts/refresh-data.mjs      → régénère data.js depuis les APIs publiques (voir plus bas)
 ```
 
 Le site lui-même reste 4 fichiers statiques à la racine — pas de sous-dossiers,
-pas de liens relatifs fragiles. `scripts/` et `.github/` ne sont utiles qu'au
-rafraîchissement automatique des données, jamais chargés par le navigateur.
+pas de liens relatifs fragiles. `scripts/` n'est utile qu'au rafraîchissement
+des données, jamais chargé par le navigateur.
 
 ## Utilisation en local
 
@@ -40,16 +39,18 @@ JS organisé par jeu (`lol`, `valorant`, `tft`, `genshin`, `hsr`, `wuwa`) plus
 la liste des jeux affichés dans la sidebar (`games`). Modifier ce fichier
 suffit à mettre à jour toutes les pages, aucune duplication de chiffres.
 
-### Rafraîchissement en un clic
+### Rafraîchissement des données
 
-Un [GitHub Action](.github/workflows/refresh-data.yml) se déclenche **à la
-demande, depuis l'onglet *Actions* du repo** → *Refresh dashboard data* →
-bouton **Run workflow** (pas de planning automatique — rien ne tourne tant
-que tu n'as pas cliqué). Il exécute `scripts/refresh-data.mjs`, qui va
-chercher les vraies données publiques et régénère `data.js` tout seul, puis
-commit/push le résultat si quelque chose a changé.
+`scripts/refresh-data.mjs` va chercher les vraies données publiques et
+régénère `data.js` tout seul. Rien d'automatique ni de programmé — tu le
+lances toi-même (ou tu me demandes de le lancer) quand tu veux une mise à
+jour :
+```
+node scripts/refresh-data.mjs                                    # Genshin + Wuwa uniquement
+RIOT_API_KEY=ta-clé node scripts/refresh-data.mjs                # + LoL/TFT
+```
 
-Sources couvertes par ce bouton :
+Sources couvertes par ce script :
 - **Genshin Impact** — via l'API publique d'[Enka.network](https://enka.network) :
   tout ton roster de personnages showcasé (pas juste la vitrine mise en avant),
   avec une Crit Value calculée nous-mêmes (2×Taux Crit + DGT Crit, uniquement
@@ -66,24 +67,16 @@ Sources couvertes par ce bouton :
   plus lourde à mettre en œuvre.
 
   ⚠️ La clé Riot utilisée est une **clé "Development"**, gratuite mais
-  valable seulement **24h**. Si elle expire, le rafraîchissement Genshin/Wuwa
-  continue de fonctionner normalement (chaque source est indépendante) et
-  seul LoL/TFT est sauté ce jour-là, avec un message d'erreur clair dans les
-  logs du run GitHub Actions. Pour la renouveler : régénère une clé sur
-  [developer.riotgames.com](https://developer.riotgames.com/), puis va dans
-  **Settings → Secrets and variables → Actions** du repo → `RIOT_API_KEY` →
-  *Update* (jamais besoin de me la redonner en conversation).
+  valable seulement **24h** — il faut en régénérer une sur
+  [developer.riotgames.com](https://developer.riotgames.com/) à chaque
+  expiration pour relancer le script avec `RIOT_API_KEY`. Si tu ne la passes
+  pas (ou qu'elle a expiré), le script continue de rafraîchir Genshin/Wuwa
+  normalement et saute juste LoL/TFT avec un message d'erreur clair.
 
 Source **pas automatisable** :
 - **Valorant** — Riot ne donne pas accès à son API de stats/matchs Valorant
   aux clés de développeur personnelles (accès réservé aux partenaires
   esport) ; ça reste manuel.
-
-Tu peux lancer le script toi-même en local à tout moment :
-```
-node scripts/refresh-data.mjs                                    # Genshin + Wuwa uniquement
-RIOT_API_KEY=ta-clé node scripts/refresh-data.mjs                # + LoL/TFT
-```
 
 Pour rafraîchir manuellement Valorant (ou n'importe quelle stat que le
 script ne couvre pas), redemande à Claude dans la conversation :
