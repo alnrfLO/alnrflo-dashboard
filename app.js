@@ -137,70 +137,98 @@
     wuwa: { colorVar: '--cyan-vivid', fallback: '#17A9C4' },
   };
 
-  function renderHome() {
+  function gameQuickStats() {
     const bestGenshin = D.genshin.characters.reduce((a, c) => (c.critValue > a.critValue ? c : a));
     const wuwaByBoard = [...D.wuwa.characters].sort((a, b) => b.boardPct - a.boardPct);
+    return [
+      { id: 'lol', avatar: D.lol.profileIcon, name: 'League of Legends', badgeClass: 'badge-gold', badgeText: 'op.gg', stats: [
+        ['Niveau', D.lol.summonerLevel],
+        ['Solo / Duo', `${D.lol.queues.soloDuo.tier} · ${D.lol.queues.soloDuo.lp} LP`],
+        ['WR Solo / Duo', D.lol.queues.soloDuo.winrate + '%'],
+        ['Flexible', `${D.lol.queues.flex.tier} · ${D.lol.queues.flex.lp} LP`],
+        ['WR Flexible', D.lol.queues.flex.winrate + '%'],
+        ['Top champion', `${D.lol.mastery[0].champion} · ${Math.round(D.lol.mastery[0].points / 1000)}k pts`]
+      ] },
+      { id: 'valorant', avatar: null, name: 'Valorant', badgeClass: 'badge-rose', badgeText: 'op.gg', stats: [
+        ['Niveau', D.valorant.accountLevel],
+        ['Rang', D.valorant.rank],
+        ['Winrate', `${D.valorant.winrate}% (${D.valorant.wins}V ${D.valorant.losses}D)`],
+        ['KDA', D.valorant.stats.kda.toFixed(2) + ':1'],
+        ['Headshot %', D.valorant.stats.headshotPct + '%'],
+        ['Meilleur rôle', `${D.valorant.roles[1].role} · ${D.valorant.roles[1].winrate}% WR`]
+      ] },
+      { id: 'tft', avatar: D.lol.profileIcon, name: 'Teamfight Tactics', badgeClass: 'badge-peach', badgeText: 'op.gg', stats: [
+        ['Rang', `${D.tft.ranked.tier} · ${D.tft.ranked.lp} LP`],
+        ['Top 4', D.tft.ranked.top4Rate + '%'],
+        ['Place moyenne', D.tft.ranked.avgPlacement + ' / 8'],
+        ['Parties', D.tft.ranked.games],
+        ['Meilleure unité', `${D.tft.topChampions[3].champion} · #${D.tft.topChampions[3].avgPlacement}`],
+        ['Top synergie', D.tft.topTraits[0].trait]
+      ] },
+      { id: 'genshin', avatar: D.genshin.profileIcon, name: 'Genshin Impact', badgeClass: 'badge-teal', badgeText: 'enka.network', stats: [
+        ['Rang Aventure', 'AR ' + D.genshin.adventureRank],
+        ['Niveau Monde', 'WL ' + D.genshin.worldLevel],
+        ['Abîme Spiralé', D.genshin.spiralAbyss],
+        ['Roster build', D.genshin.characters.length + ' personnages'],
+        ['Meilleur CV', `${bestGenshin.name} · ${bestGenshin.critValue}`],
+        ['Hauts faits', D.genshin.achievements]
+      ] },
+      { id: 'hsr', avatar: D.hsr.profileIcon, name: 'Honkai: Star Rail', badgeClass: 'badge-lav', badgeText: 'enka.network', stats: [
+        ['Niv. Trailblaze', 'TL ' + D.hsr.trailblazeLevel],
+        ['Équilibre', 'EQ ' + D.hsr.equilibriumLevel],
+        ['Univers Simulé', D.hsr.simulatedUniverse],
+        ['Hauts faits', D.hsr.achievements],
+        ['Vitrine', `${D.hsr.showcase.name} · Éidolon ${D.hsr.showcase.eidolon}`],
+        ['Crit / Crit DMG', `${D.hsr.showcase.stats.critRate}% / ${D.hsr.showcase.stats.critDmg}%`]
+      ] },
+      { id: 'wuwa', avatar: wuwaByBoard[0].portrait, name: 'Wuthering Waves', badgeClass: 'badge-cyan', badgeText: 'wuwa.build', stats: [
+        ['Résonateurs', D.wuwa.characters.map(c => c.name).join(' · ')],
+        ['Meilleur board', `${wuwaByBoard[0].name} · ${wuwaByBoard[0].boardPct}%`],
+        ['2e board', `${wuwaByBoard[1] ? `${wuwaByBoard[1].name} · ${wuwaByBoard[1].boardPct}%` : '—'}`],
+        ['Échos', D.wuwa.echoesCount],
+        ['Meilleur écho', `${D.wuwa.echoes[0].name} · ${fmt1(D.wuwa.echoes[0].cv)} CV`],
+        ['Serveur', D.wuwa.server]
+      ] }
+    ];
+  }
+
+  function islandPreviewHtml(g) {
+    return `
+      <div class="island-preview-title">${g.avatar ? `<img src="${g.avatar}" alt=""/>` : ''}${esc(g.name)}<span class="badge ${g.badgeClass} realm-summary-badge">${esc(g.badgeText)}</span></div>
+      ${fullStats(g.stats)}
+      <a href="#/${g.id}" class="island-preview-hint">Voir la page →</a>
+    `;
+  }
+
+  function renderHome() {
+    const stats = gameQuickStats();
     $content.innerHTML = `
-      <div class="island-scene"><canvas id="islandCanvas"></canvas></div>
+      <div class="island-scene">
+        <div class="island-stage">
+          <canvas id="islandCanvas"></canvas>
+          <button class="island-arrow island-arrow-prev" id="islandPrev" aria-label="Île précédente">‹</button>
+          <button class="island-arrow island-arrow-next" id="islandNext" aria-label="Île suivante">›</button>
+        </div>
+        <div class="island-preview" id="islandPreview">${islandPreviewHtml(stats[0])}</div>
+      </div>
 
       <div class="divider"><div class="line"></div><span class="mark">✦</span><div class="line"></div></div>
 
       <div class="realm-label">Résumé par royaume</div>
       <div class="realm-summary">
-        ${realmSummary('lol', D.lol.profileIcon, 'League of Legends', 'badge-gold', 'op.gg', [
-          ['Niveau', D.lol.summonerLevel],
-          ['Solo / Duo', `${D.lol.queues.soloDuo.tier} · ${D.lol.queues.soloDuo.lp} LP`],
-          ['WR Solo / Duo', D.lol.queues.soloDuo.winrate + '%'],
-          ['Flexible', `${D.lol.queues.flex.tier} · ${D.lol.queues.flex.lp} LP`],
-          ['WR Flexible', D.lol.queues.flex.winrate + '%'],
-          ['Top champion', `${D.lol.mastery[0].champion} · ${Math.round(D.lol.mastery[0].points / 1000)}k pts`]
-        ])}
-        ${realmSummary('valorant', null, 'Valorant', 'badge-rose', 'op.gg', [
-          ['Niveau', D.valorant.accountLevel],
-          ['Rang', D.valorant.rank],
-          ['Winrate', `${D.valorant.winrate}% (${D.valorant.wins}V ${D.valorant.losses}D)`],
-          ['KDA', D.valorant.stats.kda.toFixed(2) + ':1'],
-          ['Headshot %', D.valorant.stats.headshotPct + '%'],
-          ['Meilleur rôle', `${D.valorant.roles[1].role} · ${D.valorant.roles[1].winrate}% WR`]
-        ])}
-        ${realmSummary('tft', D.lol.profileIcon, 'Teamfight Tactics', 'badge-peach', 'op.gg', [
-          ['Rang', `${D.tft.ranked.tier} · ${D.tft.ranked.lp} LP`],
-          ['Top 4', D.tft.ranked.top4Rate + '%'],
-          ['Place moyenne', D.tft.ranked.avgPlacement + ' / 8'],
-          ['Parties', D.tft.ranked.games],
-          ['Meilleure unité', `${D.tft.topChampions[3].champion} · #${D.tft.topChampions[3].avgPlacement}`],
-          ['Top synergie', D.tft.topTraits[0].trait]
-        ])}
-        ${realmSummary('genshin', D.genshin.profileIcon, 'Genshin Impact', 'badge-teal', 'enka.network', [
-          ['Rang Aventure', 'AR ' + D.genshin.adventureRank],
-          ['Niveau Monde', 'WL ' + D.genshin.worldLevel],
-          ['Abîme Spiralé', D.genshin.spiralAbyss],
-          ['Roster build', D.genshin.characters.length + ' personnages'],
-          ['Meilleur CV', `${bestGenshin.name} · ${bestGenshin.critValue}`],
-          ['Hauts faits', D.genshin.achievements]
-        ])}
-        ${realmSummary('hsr', D.hsr.profileIcon, 'Honkai: Star Rail', 'badge-lav', 'enka.network', [
-          ['Niv. Trailblaze', 'TL ' + D.hsr.trailblazeLevel],
-          ['Équilibre', 'EQ ' + D.hsr.equilibriumLevel],
-          ['Univers Simulé', D.hsr.simulatedUniverse],
-          ['Hauts faits', D.hsr.achievements],
-          ['Vitrine', `${D.hsr.showcase.name} · Éidolon ${D.hsr.showcase.eidolon}`],
-          ['Crit / Crit DMG', `${D.hsr.showcase.stats.critRate}% / ${D.hsr.showcase.stats.critDmg}%`]
-        ])}
-        ${realmSummary('wuwa', wuwaByBoard[0].portrait, 'Wuthering Waves', 'badge-cyan', 'wuwa.build', [
-          ['Résonateurs', D.wuwa.characters.map(c => c.name).join(' · ')],
-          ['Meilleur board', `${wuwaByBoard[0].name} · ${wuwaByBoard[0].boardPct}%`],
-          ['2e board', `${wuwaByBoard[1] ? `${wuwaByBoard[1].name} · ${wuwaByBoard[1].boardPct}%` : '—'}`],
-          ['Échos', D.wuwa.echoesCount],
-          ['Meilleur écho', `${D.wuwa.echoes[0].name} · ${fmt1(D.wuwa.echoes[0].cv)} CV`],
-          ['Serveur', D.wuwa.server]
-        ])}
+        ${stats.map(g => realmSummary(g.id, g.avatar, g.name, g.badgeClass, g.badgeText, g.stats)).join('')}
       </div>
 
       <footer>« Chaque royaume garde ses propres légendes — reviens avec tes sceaux, et le codex s'écrira. »</footer>
     `;
+    const preview = document.getElementById('islandPreview');
+    document.getElementById('islandPrev').addEventListener('click', () => window.islandSceneGo && window.islandSceneGo(-1));
+    document.getElementById('islandNext').addEventListener('click', () => window.islandSceneGo && window.islandSceneGo(1));
     if (window.initIslandScene) {
-      requestAnimationFrame(() => window.initIslandScene(D.games.map(g => ({ id: g.id, ...GAME_COLOR[g.id] }))));
+      requestAnimationFrame(() => window.initIslandScene(
+        D.games.map(g => ({ id: g.id, ...GAME_COLOR[g.id] })),
+        { onFocusChange: (index) => { preview.innerHTML = islandPreviewHtml(stats[index]); } }
+      ));
     }
   }
 
