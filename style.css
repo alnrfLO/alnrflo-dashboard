@@ -786,3 +786,17 @@
   .realm-summary .full-stats{ grid-template-columns: 1fr 1fr; }
   @media (max-width:1080px){ .realm-summary{ grid-template-columns: repeat(2,1fr); } }
   @media (max-width:640px){ .realm-summary{ grid-template-columns: 1fr; } }
+
+  /* ============ ISLAND SCENE (home page, 3D) ============ */
+  .island-scene{
+    position:relative; border-radius:28px; overflow:hidden;
+    height: 360px;
+    background: radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,0.5), transparent 65%), var(--paper);
+    border: 1px solid var(--hairline);
+    box-shadow: 0 30px 60px -24px rgba(59,51,85,0.35);
+  }
+  .island-scene canvas{ display:block; width:100%; height:100%; }
+  body.night .island-scene{
+    background: radial-gradient(120% 100% at 50% 0%, rgba(255,255,255,0.06), transparent 65%), var(--paper);
+  }
+  @media (max-width:640px){ .island-scene{ height:260px; border-radius:20px; } }

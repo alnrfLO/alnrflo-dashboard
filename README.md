@@ -1,8 +1,9 @@
 # Codex du Voyageur — alnrfLO
 
 Dashboard gaming personnel (League of Legends, Valorant, TFT, Genshin Impact,
-Honkai: Star Rail, Wuthering Waves) réalisé en HTML/CSS/JS pur — aucun
-framework, aucune dépendance à installer, aucune étape de build.
+Honkai: Star Rail, Wuthering Waves) réalisé en HTML/CSS/JS pur — aucune
+installation, aucune étape de build. La seule dépendance externe est
+Three.js, chargée via CDN comme html2canvas.
 
 ## Structure du projet
 
@@ -11,10 +12,11 @@ index.html                → page unique (SPA) : sidebar de navigation + zone d
 style.css                  → tous les styles (thème "Codex", fonts, cartes, mode nuit, sidebar)
 data.js                     → toutes les stats, dans window.DASH_DATA
 app.js                       → routage (hash-based : #/lol, #/valorant, ...) + rendu des pages
+islands.js                    → scène 3D des îles flottantes sur la page d'accueil (Three.js)
 scripts/refresh-data.mjs      → régénère data.js depuis les APIs publiques (voir plus bas)
 ```
 
-Le site lui-même reste 4 fichiers statiques à la racine — pas de sous-dossiers,
+Le site lui-même reste des fichiers statiques à la racine — pas de sous-dossiers,
 pas de liens relatifs fragiles. `scripts/` n'est utile qu'au rafraîchissement
 des données, jamais chargé par le navigateur.
 
@@ -84,6 +86,7 @@ script ne couvre pas), redemande à Claude dans la conversation :
 
 ## Fonctionnalités
 
+- Scène 3D sur la page d'accueil : une île flottante par jeu, disposées en cercle, qui tournent et flottent doucement (Three.js) — clique sur une île pour aller sur la page du jeu. Respecte `prefers-reduced-motion` (l'animation se coupe si activé).
 - Navigation par sidebar persistante (avatar de chaque jeu + statut suivi/en attente)
 - Routage par hash (`#/lol`, `#/valorant`, ...) — chaque page a son URL, retour arrière navigateur fonctionnel
 - Résumé dense "par royaume" sur la page d'accueil (stats clés de chaque jeu en un coup d'œil)

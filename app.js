@@ -128,10 +128,21 @@
   }
 
   /* ============================================================ HOME */
+  const GAME_COLOR = {
+    lol: { colorVar: '--gold-vivid', fallback: '#E8A93C' },
+    valorant: { colorVar: '--rose-vivid', fallback: '#F0466C' },
+    tft: { colorVar: '--peach-vivid', fallback: '#E8842E' },
+    genshin: { colorVar: '--teal-vivid', fallback: '#16B894' },
+    hsr: { colorVar: '--lav-vivid', fallback: '#6C4FE0' },
+    wuwa: { colorVar: '--cyan-vivid', fallback: '#17A9C4' },
+  };
+
   function renderHome() {
     const bestGenshin = D.genshin.characters.reduce((a, c) => (c.critValue > a.critValue ? c : a));
     const wuwaByBoard = [...D.wuwa.characters].sort((a, b) => b.boardPct - a.boardPct);
     $content.innerHTML = `
+      <div class="island-scene"><canvas id="islandCanvas"></canvas></div>
+
       <div class="divider"><div class="line"></div><span class="mark">✦</span><div class="line"></div></div>
 
       <div class="realm-label">Résumé par royaume</div>
@@ -188,6 +199,9 @@
 
       <footer>« Chaque royaume garde ses propres légendes — reviens avec tes sceaux, et le codex s'écrira. »</footer>
     `;
+    if (window.initIslandScene) {
+      requestAnimationFrame(() => window.initIslandScene(D.games.map(g => ({ id: g.id, ...GAME_COLOR[g.id] }))));
+    }
   }
 
   function realmSummary(id, avatar, name, badgeClass, badgeText, stats) {
@@ -428,6 +442,7 @@
 
   function router() {
     const route = currentRoute();
+    if (window.stopIslandScene) window.stopIslandScene();
     (ROUTES[route] || renderHome)();
     document.querySelectorAll('.app-nav-item').forEach(a => a.classList.toggle('active', a.dataset.route === route));
     window.scrollTo(0, 0);
